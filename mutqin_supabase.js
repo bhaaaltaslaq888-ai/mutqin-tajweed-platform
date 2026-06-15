@@ -282,3 +282,4 @@ async function mqMigrateLocalProgress(localS){
 }
 
 window.MQ = MQ;   // للوصول من الكونسول أثناء التطوير
+window.sb = sb;   // عميل Supabase متاح للواجهة

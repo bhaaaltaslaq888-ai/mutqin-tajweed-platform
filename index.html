@@ -395,6 +395,46 @@ button {
   gap: 6px;
 }
 
+/* اختيار الدور — 3 بطاقات */
+.role-pick { display:flex; flex-direction:column; gap:12px; margin-top:8px; }
+.role-card {
+  display:flex; align-items:center; gap:14px;
+  width:100%; padding:16px 18px;
+  background:var(--bg); border:1.5px solid var(--line);
+  border-radius:var(--r-md); cursor:pointer;
+  transition:all var(--fast); text-align:right;
+}
+.role-card:hover { border-color:var(--teal); background:var(--teal-pale); transform:translateY(-2px); box-shadow:0 6px 20px var(--teal-glow); }
+.role-card-icon { font-size:30px; line-height:1; flex-shrink:0; }
+.role-card-body { flex:1; }
+.role-card-title { font-size:var(--fs-md); font-weight:700; color:var(--teal-dark); margin-bottom:2px; }
+.role-card-desc  { font-size:var(--fs-xs); color:var(--muted); line-height:1.5; }
+.role-card-arrow { font-size:20px; color:var(--soft); flex-shrink:0; }
+.login-back {
+  display:inline-flex; align-items:center; gap:6px;
+  background:none; border:none; color:var(--soft);
+  font-size:var(--fs-sm); font-weight:600; cursor:pointer;
+  margin-bottom:18px; padding:4px 0; transition:color var(--fast);
+}
+.login-back:hover { color:var(--teal-dark); }
+.login-role-badge {
+  display:inline-block; padding:5px 14px; border-radius:999px;
+  font-size:var(--fs-xs); font-weight:700; margin-bottom:20px;
+}
+.login-role-badge.admin   { background:var(--gold-glow); color:var(--gold); }
+.login-role-badge.teacher { background:var(--teal-glow); color:var(--teal-dark); }
+.login-role-badge.student { background:var(--teal-pale); color:var(--teal-dark); }
+
+/* تبويبات دخول/تسجيل (للمعلّم والأدمن) */
+.login-tabs { display:flex; gap:6px; margin-bottom:20px; background:var(--bg); padding:5px; border-radius:var(--r-md); border:1px solid var(--line); }
+.login-tab { flex:1; padding:9px; border:none; background:none; border-radius:var(--r-sm,8px); font-size:var(--fs-sm); font-weight:600; color:var(--soft); cursor:pointer; transition:all var(--fast); }
+.login-tab.active { background:var(--card); color:var(--teal-dark); box-shadow:0 2px 8px rgba(0,0,0,.06); }
+.login-pending {
+  margin-top:18px; padding:12px 14px; border-radius:var(--r-md);
+  background:var(--gold-glow); border:1px solid var(--gold);
+  font-size:var(--fs-xs); color:var(--ink-mid); line-height:1.7; text-align:right;
+}
+
 .login-accounts { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 22px; }
 .login-accounts-title {
   font-size: var(--fs-xs);
@@ -423,6 +463,54 @@ button {
   background: var(--teal-pale);
   transform: translateX(-2px);
 }
+
+/* ══════════════════════════════════════════════════════════════
+   لوحة التحكم (إدارة / معلّم)
+   ══════════════════════════════════════════════════════════════ */
+#panel { min-height:100vh; background:var(--bg); }
+.pnl-inner { max-width:1000px; margin:0 auto; padding:24px 20px 60px; }
+.pnl-top {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; margin-bottom:24px; flex-wrap:wrap;
+}
+.pnl-title { font-size:24px; font-weight:800; color:var(--teal-dark); display:flex; align-items:center; gap:10px; }
+.pnl-back {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:10px 18px; border:1.5px solid var(--line); border-radius:var(--r-md);
+  background:var(--card); color:var(--ink-mid); font-weight:600; font-size:var(--fs-sm);
+  cursor:pointer; transition:all var(--fast);
+}
+.pnl-back:hover { border-color:var(--teal); color:var(--teal-dark); }
+.pnl-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin-bottom:26px; }
+.pnl-stat { background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg); padding:18px; text-align:center; }
+.pnl-stat-num { font-size:32px; font-weight:800; color:var(--teal-dark); line-height:1; }
+.pnl-stat-lbl { font-size:var(--fs-xs); color:var(--soft); margin-top:6px; }
+.pnl-section-title { font-size:var(--fs-md); font-weight:700; color:var(--ink); margin:24px 0 14px; }
+.pnl-table-wrap { background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; }
+.pnl-table { width:100%; border-collapse:collapse; font-size:var(--fs-sm); }
+.pnl-table th { background:var(--bg); padding:13px 14px; text-align:right; font-weight:700; color:var(--ink-mid); font-size:var(--fs-xs); border-bottom:1px solid var(--line); }
+.pnl-table td { padding:13px 14px; text-align:right; border-bottom:1px solid var(--line); color:var(--ink); }
+.pnl-table tr:last-child td { border-bottom:none; }
+.pnl-table tr:hover td { background:var(--teal-pale); }
+.pnl-role-tag { display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:700; }
+.pnl-role-tag.admin   { background:var(--gold-glow); color:var(--gold); }
+.pnl-role-tag.teacher { background:var(--teal-glow); color:var(--teal-dark); }
+.pnl-role-tag.student { background:var(--bg); color:var(--soft); border:1px solid var(--line); }
+.pnl-btn {
+  padding:7px 14px; border-radius:var(--r-sm,8px); font-size:var(--fs-xs); font-weight:700;
+  cursor:pointer; border:1.5px solid; transition:all var(--fast); white-space:nowrap;
+}
+.pnl-btn.promote { background:var(--teal-glow); border-color:var(--teal); color:var(--teal-dark); }
+.pnl-btn.promote:hover { background:var(--teal); color:#fff; }
+.pnl-btn.demote { background:var(--bg); border-color:var(--line); color:var(--soft); }
+.pnl-btn.demote:hover { border-color:var(--err); color:var(--err); }
+.pnl-empty { padding:40px; text-align:center; color:var(--soft); }
+.pnl-loading { padding:40px; text-align:center; color:var(--soft); }
+.pnl-bar { width:100%; height:8px; background:var(--bg); border-radius:999px; overflow:hidden; }
+.pnl-bar-fill { height:100%; background:linear-gradient(90deg,var(--teal-mid),var(--teal-dark)); border-radius:999px; }
+.pnl-search { width:100%; max-width:320px; padding:10px 14px; border:1.5px solid var(--line); border-radius:var(--r-md); font-size:var(--fs-sm); font-family:inherit; direction:rtl; text-align:right; outline:none; background:var(--card); color:var(--ink); margin-bottom:16px; }
+.pnl-search:focus { border-color:var(--teal); }
+.ht-panel-btn { width:auto !important; padding:0 14px !important; font-size:var(--fs-xs) !important; font-weight:700 !important; color:var(--teal-dark) !important; }
 
 /* ══════════════════════════════════════════════════════════════
    HOME SCREEN
@@ -2493,6 +2581,9 @@ body.dark #darkToggle:hover {
 <!-- شاشة الدخول -->
 <div id="home" class="view hidden"></div>
 
+<!-- لوحة التحكم (إدارة / معلّم) -->
+<div id="panel" class="view hidden"></div>
+
 <!-- عرض الدورة -->
 <div id="course" class="view hidden">
   <header id="cHeader"></header>
@@ -2527,7 +2618,7 @@ body.dark #darkToggle:hover {
 /* =======================================================
    مُتقِن — منصة تعليم التجويد التفاعلية
    المصدر العلمي: ملخصا الدورتين التمهيدية والمتوسطة
-   من كتاب المنير في أحكام التجويد (إعداد م. يوسف البستنجي)
+   من كتاب المنير في أحكام التجويد
    ======================================================= */
 
 /* ============ طبقة البيانات ============ */
@@ -3767,6 +3858,9 @@ exam:[
 let LS_KEY='mutqin_v4_default';
 const LS_EMAIL_KEY='mutqin_v4_user';
 let currentEmail=null;
+let currentRole=null;            // 'admin' | 'teacher' | 'student'
+let currentProfile=null;         // ملف Supabase للمعلّم/الأدمن
+const ADMIN_PASSWORD='@bahaa123'; // (احتياطي — لم يعد يُستخدم بعد ربط Supabase)
 let S={done:{c1:[],c2:[],c3:[]},exam:{c1:null,c2:null,c3:null},passed:{c1:false,c2:false,c3:false},stars:0,medals:[],aw:{}};
 let cur={cid:null, ri:0};          // الدورة والحكم الحالي
 let pres={slides:[], i:0, backRi:0};// وضع العرض
@@ -3827,9 +3921,13 @@ function renderHome(){
 
   /* ───── الشريط العلوي ───── */
   const topbar=el('div','home-topbar');
+  var panelBtn = (currentRole==='admin' || currentRole==='teacher')
+    ? `<button class="ht-icon-btn ht-panel-btn" id="htPanel" title="لوحة التحكم">${currentRole==='admin'?'🛡️ لوحة الإدارة':'👨‍🏫 لوحة المعلّم'}</button>`
+    : '';
   topbar.innerHTML=
     `<div class="ht-brand"><span class="ht-mark">مُتقِن</span><span class="ht-dot">·</span></div>`+
     `<div class="ht-actions">`+
+      panelBtn+
       `<button class="ht-icon-btn" id="htAbout" title="حول المنصة">ℹ️</button>`+
       `<button class="ht-icon-btn" id="htDark" title="تبديل الوضع">${isDark?'☀️':'🌙'}</button>`+
     `</div>`;
@@ -4052,7 +4150,7 @@ function renderHome(){
     `</div>`+
     `<div class="hf-divider"></div>`+
     `<div class="hf-bottom">`+
-      `<span class="hf-src">📖 المصدر العلمي: «المنير في أحكام التجويد» — إعداد م. يوسف البستنجي</span>`+
+      `<span class="hf-src">📖 المصدر العلمي: «المنير في أحكام التجويد»</span>`+
       `<div class="hf-userline">`+
         `<span class="user-email">👤 ${esc(currentEmail||'')}</span>`+
         `<button class="hf-mini" id="hfLogout">↩ خروج</button>`+
@@ -4073,6 +4171,8 @@ function renderHome(){
   if(dToggle)dToggle.onclick=()=>{ toggleDark(); renderHome(); };
   const aboutBtn=document.getElementById('htAbout');
   if(aboutBtn)aboutBtn.onclick=showAbout;
+  const panelBtnEl=document.getElementById('htPanel');
+  if(panelBtnEl)panelBtnEl.onclick=function(){ currentRole==='admin'?renderAdminPanel():renderTeacherPanel(); };
   const lo=document.getElementById('hfLogout'); if(lo)lo.onclick=logout;
   const rs=document.getElementById('hfReset'); if(rs)rs.onclick=resetProgress;
 
@@ -5415,43 +5515,189 @@ function vmToggleItem(nid){ vmToggleNode(nid); }
 
 /* تسجيل الدخول */
 function renderLogin(){
+  renderRolePick();
+}
+
+/* الشاشة 1: اختيار الدور */
+function renderRolePick(){
+  var l=document.getElementById('login');
+  l.innerHTML=
+    '<div class="login-box">'+
+      '<div class="login-brand">مُتقِن</div>'+
+      '<div class="login-slogan">تعلّم التجويد بإتقان</div>'+
+      '<div class="login-sep"></div>'+
+      '<label class="login-label">اختر طريقة الدخول</label>'+
+      '<div class="role-pick">'+
+        '<button class="role-card" data-role="admin">'+
+          '<span class="role-card-icon">🛡️</span>'+
+          '<span class="role-card-body"><span class="role-card-title">إدارة</span>'+
+          '<span class="role-card-desc">بريد + كلمة سر · صلاحيات كاملة</span></span>'+
+          '<span class="role-card-arrow">‹</span>'+
+        '</button>'+
+        '<button class="role-card" data-role="teacher">'+
+          '<span class="role-card-icon">👨‍🏫</span>'+
+          '<span class="role-card-body"><span class="role-card-title">معلّم</span>'+
+          '<span class="role-card-desc">بريد المعلّم · متابعة الطلاب</span></span>'+
+          '<span class="role-card-arrow">‹</span>'+
+        '</button>'+
+        '<button class="role-card" data-role="student">'+
+          '<span class="role-card-icon">🎓</span>'+
+          '<span class="role-card-body"><span class="role-card-title">طالب</span>'+
+          '<span class="role-card-desc">بريد الطالب · حفظ التقدّم</span></span>'+
+          '<span class="role-card-arrow">‹</span>'+
+        '</button>'+
+      '</div>'+
+    '</div>';
+  l.querySelectorAll('.role-card').forEach(function(b){
+    b.onclick=function(){ renderRoleLogin(b.dataset.role); };
+  });
+  show('login');
+}
+
+/* الشاشة 2: نموذج الدخول حسب الدور */
+function renderRoleLogin(role){
+  if(role==='student') return renderStudentLogin();
+  return renderSupaLogin(role, 'signin');   // المعلّم والأدمن: عبر Supabase
+}
+
+/* ───── دخول الطالب (محلي — بريد فقط) ───── */
+function renderStudentLogin(){
   var l=document.getElementById('login');
   var savedUsers=[];
   try{var arr=JSON.parse(localStorage.getItem('mutqin_v4_userlist'));if(Array.isArray(arr))savedUsers=arr;}catch(e){}
   var accsHTML='';
   if(savedUsers.length){
-    accsHTML='<div class="login-accounts"><div class="login-accounts-title">\u062d\u0633\u0627\u0628\u0627\u062a\u0645 \u0627\u0644\u0633\u0627\u0628\u0642\u0629<\/div>';
-    savedUsers.forEach(function(em){
-      accsHTML+='<button class="login-account-btn" data-email="'+esc(em)+'">'+esc(em)+'<\/button>';
-    });
-    accsHTML+='<\/div>';
+    accsHTML='<div class="login-accounts"><div class="login-accounts-title">حسابات سابقة</div>';
+    savedUsers.forEach(function(em){ accsHTML+='<button class="login-account-btn" data-email="'+esc(em)+'">'+esc(em)+'</button>'; });
+    accsHTML+='</div>';
   }
-  l.innerHTML='<div class="login-box"><div class="login-brand">\u0645\u064f\u062a\u0642\u0650\u0646<\/div><div class="login-slogan">\u062a\u0639\u0644\u0651\u0645 \u0627\u0644\u062a\u062c\u0648\u064a\u062f \u0628\u0625\u062a\u0642\u0627\u0646<\/div><div class="login-sep"><\/div><label class="login-label">\u0623\u062f\u062e\u0644 \u0628\u0631\u064a\u062f\u0643 \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a<\/label><input type="email" class="login-input" id="loginEmail" placeholder="example@email.com" autocomplete="email"><div class="login-errmsg" id="loginErr"><\/div><button class="btn login-btn" id="loginSubmit">\u0627\u0628\u062f\u0623 \u0627\u0644\u0622\u0646 \u279e<\/button><div class="login-note">\U0001f512 \u0628\u0631\u064a\u062f\u0643 \u064a\u062d\u062f\u062f \u062a\u0642\u062f\u0645\u0643 \u2014 \u0644\u0627 \u062d\u0627\u062c\u0629 \u0644\u0643\u0644\u0645\u0629 \u0645\u0631\u0648\u0631<\/div>'+accsHTML+'<\/div>';
+  l.innerHTML=
+    '<div class="login-box">'+
+      '<button class="login-back" id="loginBack">‹ رجوع</button>'+
+      '<div class="login-role-badge student">🎓 طالب</div>'+
+      '<div class="login-brand" style="font-size:38px">دخول الطالب</div>'+
+      '<div class="login-sep" style="margin:18px 0"></div>'+
+      '<label class="login-label">البريد الإلكتروني</label>'+
+      '<input type="email" class="login-input" id="loginEmail" placeholder="example@email.com" autocomplete="email">'+
+      '<div class="login-errmsg" id="loginErr"></div>'+
+      '<button class="btn login-btn" id="loginSubmit">ابدأ الآن ➜</button>'+
+      '<div class="login-note">🔒 بريدك يحدّد تقدّمك — لا حاجة لكلمة مرور</div>'+
+      accsHTML+
+    '</div>';
   var inp=document.getElementById('loginEmail');
   var errEl=document.getElementById('loginErr');
   var doLogin=function(){
     var email=inp.value.trim().toLowerCase();
     if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-      inp.classList.add('err');
-      errEl.textContent='\u0627\u0644\u0631\u062c\u0627\u0621 \u0625\u062f\u062e\u0627\u0644 \u0628\u0631\u064a\u062f \u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a \u0635\u062d\u064a\u062d';
-      return;
+      inp.classList.add('err'); errEl.textContent='الرجاء إدخال بريد إلكتروني صحيح'; return;
     }
-    loginUser(email);
+    loginUser(email, 'student');
   };
   inp.oninput=function(){inp.classList.remove('err');errEl.textContent='';};
   inp.onkeydown=function(e){if(e.key==='Enter')doLogin();};
   document.getElementById('loginSubmit').onclick=doLogin;
-  l.querySelectorAll('.login-account-btn').forEach(function(b){
-    b.onclick=function(){loginUser(b.dataset.email);};
-  });
-  show('login');
+  document.getElementById('loginBack').onclick=renderRolePick;
+  l.querySelectorAll('.login-account-btn').forEach(function(b){ b.onclick=function(){loginUser(b.dataset.email,'student');}; });
+  inp.focus();
 }
 
-function loginUser(email){
+/* ───── دخول/تسجيل المعلّم والأدمن (عبر Supabase) ───── */
+function renderSupaLogin(role, mode){
+  var l=document.getElementById('login');
+  var meta={
+    admin:  {icon:'🛡️', label:'الإدارة', badge:'إدارة', cls:'admin'},
+    teacher:{icon:'👨‍🏫', label:'المعلّم', badge:'معلّم', cls:'teacher'}
+  }[role];
+
+  var pendingNote = (role==='teacher' && mode==='signup')
+    ? '<div class="login-pending">📌 بعد التسجيل ستدخل كـ«طالب» مؤقتًا. أبلغ الإدارة باعتماد بريدك معلّمًا، ثم أعد الدخول.</div>'
+    : '';
+
+  l.innerHTML=
+    '<div class="login-box">'+
+      '<button class="login-back" id="loginBack">‹ رجوع</button>'+
+      '<div class="login-role-badge '+meta.cls+'">'+meta.icon+' '+meta.badge+'</div>'+
+      '<div class="login-brand" style="font-size:34px">'+(mode==='signin'?'تسجيل الدخول':'إنشاء حساب')+'</div>'+
+      '<div class="login-tabs">'+
+        '<button class="login-tab '+(mode==='signin'?'active':'')+'" id="tabSignin">دخول</button>'+
+        '<button class="login-tab '+(mode==='signup'?'active':'')+'" id="tabSignup">حساب جديد</button>'+
+      '</div>'+
+      (mode==='signup' ? '<label class="login-label">الاسم الكامل</label><input type="text" class="login-input" id="loginName" placeholder="الاسم" style="direction:rtl;text-align:right">' : '')+
+      '<label class="login-label">البريد الإلكتروني</label>'+
+      '<input type="email" class="login-input" id="loginEmail" placeholder="example@email.com" autocomplete="email">'+
+      '<label class="login-label" style="margin-top:14px">كلمة السر</label>'+
+      '<input type="password" class="login-input" id="loginPw" placeholder="••••••••" autocomplete="'+(mode==='signin'?'current-password':'new-password')+'">'+
+      '<div class="login-errmsg" id="loginErr"></div>'+
+      '<button class="btn login-btn" id="loginSubmit">'+(mode==='signin'?'دخول ➜':'إنشاء الحساب ➜')+'</button>'+
+      pendingNote+
+    '</div>';
+
+  var inp=document.getElementById('loginEmail');
+  var pw=document.getElementById('loginPw');
+  var nameEl=document.getElementById('loginName');
+  var errEl=document.getElementById('loginErr');
+
+  var setErr=function(m){ errEl.textContent=m; };
+  var clearErr=function(){ errEl.textContent=''; inp.classList.remove('err'); pw.classList.remove('err'); };
+
+  var doAuth=async function(){
+    clearErr();
+    var email=inp.value.trim().toLowerCase();
+    var pass=pw.value;
+    if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ inp.classList.add('err'); setErr('بريد إلكتروني غير صحيح'); return; }
+    if(!pass||pass.length<6){ pw.classList.add('err'); setErr('كلمة السر ٦ أحرف على الأقل'); return; }
+
+    var btn=document.getElementById('loginSubmit');
+    btn.disabled=true; btn.textContent='جارٍ...';
+    try{
+      if(mode==='signup'){
+        var fullName=nameEl?nameEl.value.trim():'';
+        await mqSignUp(email, pass, fullName);
+        await mqSignIn(email, pass);
+      } else {
+        await mqSignIn(email, pass);
+      }
+      // تحقّق من الدور الفعلي من Supabase
+      var profile = MQ.profile;
+      var realRole = profile ? profile.role : 'student';
+
+      if(role==='admin' && realRole!=='admin'){
+        await mqSignOut();
+        setErr('هذا الحساب ليس إدارة. تواصل مع المسؤول.');
+        btn.disabled=false; btn.textContent='دخول ➜'; return;
+      }
+      // المعلّم: إن لم يُعتمد بعد، يدخل كطالب مع تنبيه
+      if(role==='teacher' && realRole==='student'){
+        alert('حسابك لم يُعتمد معلّمًا بعد. ستدخل كطالب — أبلغ الإدارة باعتماد بريدك.');
+      }
+      loginUserSupa(email, realRole, profile);
+    }catch(err){
+      var msg=(err&&err.message)?err.message:'تعذّر الدخول';
+      if(/Invalid login/i.test(msg)) msg='البريد أو كلمة السر غير صحيحة';
+      if(/already registered/i.test(msg)) msg='هذا البريد مسجّل — استخدم «دخول»';
+      if(/Email not confirmed/i.test(msg)) msg='يلزم تأكيد البريد أولًا (راجع إعدادات Supabase)';
+      setErr(msg);
+      btn.disabled=false; btn.textContent=(mode==='signin'?'دخول ➜':'إنشاء الحساب ➜');
+    }
+  };
+
+  inp.oninput=clearErr; pw.oninput=clearErr;
+  pw.onkeydown=function(e){if(e.key==='Enter')doAuth();};
+  document.getElementById('loginSubmit').onclick=doAuth;
+  document.getElementById('loginBack').onclick=renderRolePick;
+  document.getElementById('tabSignin').onclick=function(){ renderSupaLogin(role,'signin'); };
+  document.getElementById('tabSignup').onclick=function(){ renderSupaLogin(role,'signup'); };
+  inp.focus();
+}
+
+/* تسجيل دخول محلي (الطالب) */
+function loginUser(email, role){
   currentEmail=email;
+  currentRole=role||'student';
   LS_KEY='mutqin_v4_'+email;
   localStorage.setItem(LS_EMAIL_KEY,email);
-  // إضافة للقائمة
+  localStorage.setItem('mutqin_v4_role',currentRole);
+  localStorage.removeItem('mutqin_v4_supa');   // الطالب ليس جلسة Supabase
   var list=[];
   try{var a=JSON.parse(localStorage.getItem('mutqin_v4_userlist'));if(Array.isArray(a))list=a;}catch(e){}
   if(!list.includes(email)){list.unshift(email);if(list.length>5)list=list.slice(0,5);localStorage.setItem('mutqin_v4_userlist',JSON.stringify(list));}
@@ -5459,10 +5705,156 @@ function loginUser(email){
   renderHome();
 }
 
+/* تسجيل دخول Supabase (المعلّم/الأدمن) */
+function loginUserSupa(email, role, profile){
+  currentEmail=email;
+  currentRole=role||'student';
+  currentProfile=profile||null;
+  LS_KEY='mutqin_v4_'+email;
+  localStorage.setItem(LS_EMAIL_KEY,email);
+  localStorage.setItem('mutqin_v4_role',currentRole);
+  localStorage.setItem('mutqin_v4_supa','1');   // علامة: جلسة Supabase
+  S=load();
+  renderHome();
+}
+
+/* ════════════════════════════════════════════════════════════════
+   لوحة الإدارة
+   ════════════════════════════════════════════════════════════════ */
+async function renderAdminPanel(){
+  var p=document.getElementById('panel');
+  p.innerHTML='<div class="pnl-inner"><div class="pnl-top"><div class="pnl-title">🛡️ لوحة الإدارة</div><button class="pnl-back" id="pnlBack">‹ عودة للرئيسية</button></div><div class="pnl-loading">جارٍ تحميل المستخدمين…</div></div>';
+  show('panel');
+  document.getElementById('pnlBack').onclick=renderHome;
+
+  var users=[];
+  try{ users=await mqAdminOverview(); }
+  catch(e){ p.querySelector('.pnl-loading').innerHTML='تعذّر التحميل: '+esc(e.message||''); return; }
+
+  var admins=users.filter(u=>u.role==='admin').length;
+  var teachers=users.filter(u=>u.role==='teacher').length;
+  var students=users.filter(u=>u.role==='student').length;
+
+  var rows=users.map(function(u){
+    var roleTag='<span class="pnl-role-tag '+u.role+'">'+({admin:'إدارة',teacher:'معلّم',student:'طالب'}[u.role]||u.role)+'</span>';
+    var action='';
+    if(u.role==='student') action='<button class="pnl-btn promote" data-act="teacher" data-email="'+esc(u.email||'')+'">⬆ ترقية لمعلّم</button>';
+    else if(u.role==='teacher') action='<button class="pnl-btn demote" data-act="student" data-email="'+esc(u.email||'')+'">⬇ إعادة لطالب</button>';
+    else action='<span style="color:var(--soft);font-size:11px">—</span>';
+    return '<tr>'+
+      '<td>'+esc(u.full_name||'—')+'</td>'+
+      '<td style="direction:ltr;text-align:right">'+esc(u.email||'')+'</td>'+
+      '<td>'+roleTag+'</td>'+
+      '<td style="text-align:center">'+(u.completed||0)+'</td>'+
+      '<td>'+action+'</td>'+
+    '</tr>';
+  }).join('');
+
+  p.innerHTML=
+    '<div class="pnl-inner">'+
+      '<div class="pnl-top"><div class="pnl-title">🛡️ لوحة الإدارة</div><button class="pnl-back" id="pnlBack">‹ عودة للرئيسية</button></div>'+
+      '<div class="pnl-stats">'+
+        '<div class="pnl-stat"><div class="pnl-stat-num">'+users.length+'</div><div class="pnl-stat-lbl">إجمالي المستخدمين</div></div>'+
+        '<div class="pnl-stat"><div class="pnl-stat-num">'+teachers+'</div><div class="pnl-stat-lbl">معلّمون</div></div>'+
+        '<div class="pnl-stat"><div class="pnl-stat-num">'+students+'</div><div class="pnl-stat-lbl">طلاب</div></div>'+
+        '<div class="pnl-stat"><div class="pnl-stat-num">'+admins+'</div><div class="pnl-stat-lbl">إدارة</div></div>'+
+      '</div>'+
+      '<div class="pnl-section-title">👥 المستخدمون — اعتماد المعلّمين</div>'+
+      '<input type="text" class="pnl-search" id="pnlSearch" placeholder="🔍 ابحث بالاسم أو البريد…">'+
+      '<div class="pnl-table-wrap"><table class="pnl-table">'+
+        '<thead><tr><th>الاسم</th><th>البريد</th><th>الدور</th><th style="text-align:center">أحكام منجزة</th><th>إجراء</th></tr></thead>'+
+        '<tbody id="pnlBody">'+(rows||'<tr><td colspan="5" class="pnl-empty">لا مستخدمين بعد</td></tr>')+'</tbody>'+
+      '</table></div>'+
+    '</div>';
+
+  document.getElementById('pnlBack').onclick=renderHome;
+
+  // ترقية/إعادة
+  p.querySelectorAll('.pnl-btn').forEach(function(b){
+    b.onclick=async function(){
+      var email=b.dataset.email, act=b.dataset.act;
+      b.disabled=true; b.textContent='جارٍ…';
+      try{
+        if(act==='teacher') await mqSetRoleByEmail(email,'teacher');
+        else await mqSetRoleByEmail(email,'student');
+        renderAdminPanel();   // إعادة تحميل
+      }catch(e){ alert('تعذّر: '+(e.message||'')); b.disabled=false; }
+    };
+  });
+
+  // بحث
+  var sb2=document.getElementById('pnlSearch');
+  if(sb2) sb2.oninput=function(){
+    var q=sb2.value.trim().toLowerCase();
+    p.querySelectorAll('#pnlBody tr').forEach(function(tr){
+      tr.style.display = tr.textContent.toLowerCase().includes(q)?'':'none';
+    });
+  };
+}
+
+/* ترقية بالبريد عبر RPC (يستدعي دالة SQL promote_teacher/promote_student) */
+async function mqSetRoleByEmail(email, role){
+  var fn = role==='teacher' ? 'promote_teacher' : 'promote_student';
+  var { data, error } = await sb.rpc(fn, { p_email: email });
+  if(error) throw error;
+  return data;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   لوحة المعلّم
+   ════════════════════════════════════════════════════════════════ */
+async function renderTeacherPanel(){
+  var p=document.getElementById('panel');
+  p.innerHTML='<div class="pnl-inner"><div class="pnl-top"><div class="pnl-title">👨‍🏫 لوحة المعلّم</div><button class="pnl-back" id="pnlBack">‹ عودة للرئيسية</button></div><div class="pnl-loading">جارٍ تحميل طلابك…</div></div>';
+  show('panel');
+  document.getElementById('pnlBack').onclick=renderHome;
+
+  var students=[];
+  try{ students=await mqTeacherDashboard(); }
+  catch(e){ p.querySelector('.pnl-loading').innerHTML='تعذّر التحميل: '+esc(e.message||''); return; }
+
+  var totalDone=students.reduce((s,st)=>s+(st.completed||0),0);
+  var avg = students.length ? Math.round(totalDone/students.length) : 0;
+
+  var rows=students.map(function(st){
+    // 3 دورات × عدد الأحكام — نعرض نسبة الإنجاز التقريبية
+    var done=st.completed||0;
+    var pct=Math.min(100, Math.round((done/30)*100)); // ~30 حكمًا إجمالًا
+    return '<tr>'+
+      '<td>'+esc(st.full_name||'—')+'</td>'+
+      '<td style="direction:ltr;text-align:right">'+esc(st.email||'')+'</td>'+
+      '<td style="text-align:center">'+done+'</td>'+
+      '<td><div class="pnl-bar"><div class="pnl-bar-fill" style="width:'+pct+'%"></div></div></td>'+
+    '</tr>';
+  }).join('');
+
+  p.innerHTML=
+    '<div class="pnl-inner">'+
+      '<div class="pnl-top"><div class="pnl-title">👨‍🏫 لوحة المعلّم</div><button class="pnl-back" id="pnlBack">‹ عودة للرئيسية</button></div>'+
+      '<div class="pnl-stats">'+
+        '<div class="pnl-stat"><div class="pnl-stat-num">'+students.length+'</div><div class="pnl-stat-lbl">طلابي</div></div>'+
+        '<div class="pnl-stat"><div class="pnl-stat-num">'+totalDone+'</div><div class="pnl-stat-lbl">أحكام منجزة</div></div>'+
+        '<div class="pnl-stat"><div class="pnl-stat-num">'+avg+'</div><div class="pnl-stat-lbl">متوسط لكل طالب</div></div>'+
+      '</div>'+
+      '<div class="pnl-section-title">📊 تقدّم طلابي</div>'+
+      '<div class="pnl-table-wrap"><table class="pnl-table">'+
+        '<thead><tr><th>الاسم</th><th>البريد</th><th style="text-align:center">منجز</th><th>نسبة الإنجاز</th></tr></thead>'+
+        '<tbody>'+(rows||'<tr><td colspan="4" class="pnl-empty">لا طلاب مرتبطون بك بعد — تواصل مع الإدارة لربط الطلاب.</td></tr>')+'</tbody>'+
+      '</table></div>'+
+    '</div>';
+
+  document.getElementById('pnlBack').onclick=renderHome;
+}
+
 function logout(){
   if(!confirm('\u0647\u0644 \u062a\u0631\u064a\u062f \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062e\u0631\u0648\u062c\u061f'))return;
+  if(localStorage.getItem('mutqin_v4_supa')==='1' && window.mqSignOut){ try{ mqSignOut(); }catch(e){} }
   localStorage.removeItem(LS_EMAIL_KEY);
+  localStorage.removeItem('mutqin_v4_role');
+  localStorage.removeItem('mutqin_v4_supa');
   currentEmail=null;
+  currentRole=null;
+  currentProfile=null;
   S={done:{c1:[],c2:[],c3:[]},exam:{c1:null,c2:null,c3:null},passed:{c1:false,c2:false,c3:false},stars:0,medals:[],aw:{}};
   renderLogin();
 }
@@ -5698,8 +6090,21 @@ function initApp(){
     if(icon) icon.textContent='☀️';
     if(label) label.textContent='نهاري';
   }
+  // استعادة الجلسة
   var saved=localStorage.getItem(LS_EMAIL_KEY);
-  if(saved){loginUser(saved);}else{renderLogin();}
+  var savedRole=localStorage.getItem('mutqin_v4_role')||'student';
+  var isSupa=localStorage.getItem('mutqin_v4_supa')==='1';
+  if(saved && isSupa && window.mqInit){
+    // جلسة معلّم/أدمن: تحقّق من Supabase (الدور قد يكون تغيّر بعد اعتماد الإدارة)
+    mqInit().then(function(profile){
+      if(profile){ loginUserSupa(profile.email||saved, profile.role, profile); }
+      else { renderLogin(); }   // انتهت الجلسة
+    }).catch(function(){ renderLogin(); });
+  } else if(saved){
+    loginUser(saved, savedRole);   // جلسة طالب محلية
+  } else {
+    renderLogin();
+  }
 }
 
 function toggleDark(){
