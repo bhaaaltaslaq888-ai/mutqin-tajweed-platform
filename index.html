@@ -487,6 +487,21 @@ button {
 .pnl-stat-lbl { font-size:var(--fs-xs); color:var(--soft); margin-top:6px; }
 .pnl-section-title { font-size:var(--fs-md); font-weight:700; color:var(--ink); margin:24px 0 14px; }
 .pnl-table-wrap { background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; }
+.pnl-table-wrap.sticky-hdr { overflow:auto; max-height:420px; }
+.pnl-table-wrap.sticky-hdr thead th { position:sticky; top:0; background:var(--bg); z-index:2; }
+.pnl-btn.promote-admin { background:var(--gold-glow); border-color:var(--gold); color:#7a5c00; }
+.pnl-btn.promote-admin:hover { background:var(--gold); color:#fff; }
+.pnl-confirm-modal {
+  position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:999;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+}
+.pnl-confirm-box {
+  background:var(--card); border-radius:var(--r-lg); padding:28px 24px;
+  max-width:400px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.3);
+}
+.pnl-confirm-box h3 { font-size:18px; font-weight:800; color:var(--ink); margin-bottom:10px; }
+.pnl-confirm-box p  { font-size:14px; color:var(--ink-mid); margin-bottom:20px; line-height:1.7; }
+.pnl-confirm-btns { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 .pnl-table { width:100%; border-collapse:collapse; font-size:var(--fs-sm); }
 .pnl-table th { background:var(--bg); padding:13px 14px; text-align:right; font-weight:700; color:var(--ink-mid); font-size:var(--fs-xs); border-bottom:1px solid var(--line); }
 .pnl-table td { padding:13px 14px; text-align:right; border-bottom:1px solid var(--line); color:var(--ink); }
@@ -3852,11 +3867,20 @@ function award(stars,key){if(key&&S.aw[key])return;if(key)S.aw[key]=1;S.stars+=s
 /* بناء آية كـ spans قابلة للنقر/التمييز */
 function ayahHTML(text,opts){
   opts=opts||{};
-  const words=text.split(' ');
+  const words=text.replace(/﴿/g,'').replace(/﴾/g,'').trim().split(/\s+/);
+  // hl يدعم الفهرسة من 0 أو من 1 — نحوّل تلقائياً
+  let hlSet=new Set();
+  if(opts.hl&&opts.hl.length){
+    const min=Math.min(...opts.hl);
+    opts.hl.forEach(idx=>{
+      // إن كانت الفهرسة تبدأ من 1، نحوّلها لـ 0
+      hlSet.add(min>=1 ? idx-1 : idx);
+    });
+  }
   let h='';
   words.forEach((w,i)=>{
     const cls=['word'];
-    if(opts.hl&&opts.hl.includes(i))cls.push('hl');
+    if(hlSet.size && hlSet.has(i)) cls.push('hl');
     const attrs=opts.clickable?` tabindex="0" role="button" data-idx="${i}"`:'';
     h+=`<span class="${cls.join(' ')}"${attrs}>${esc(w)}</span>`;
     if(i<words.length-1)h+=' ';
@@ -4327,7 +4351,7 @@ function openRule(i){
   if(r.shrh){defContent.innerHTML=r.shrh;}
   else{defContent.innerHTML=buildDefVisual(r.def); if(r.think){defContent.innerHTML+=r.think;}}
   const defAcc=makeAccordion('📖','var(--teal-pale)','التعريف',
-    'اضغط لقراءة التعريف والشرح', defContent, false);
+    'اضغط لقراءة التعريف والشرح', defContent, true);
   card.appendChild(defAcc.section);
 
   // ── ٢ الأمثلة القرآنية ─────────────────────────────────
@@ -4812,20 +4836,21 @@ function printSummary(c){
 /* ================= وضع العرض في الفصل ================= */
 function enterPresent(){
   const c=COURSES[cur.cid];
-  pres={slides:[],i:0,backRi:cur.ri};
+  if(!c||!c.rules||!c.rules.length){toast('لا توجد أحكام في هذه الدورة');return;}
+  pres={slides:[],i:0,backRi:cur.ri||0};
   c.rules.forEach(r=>{
-    /* [v5] شريحة عنوان بلا مستوى صعوبة */
     pres.slides.push({type:'title',html:`<div class="p-eyebrow">${esc(c.name)}</div><h2>${esc(r.nameAr)}</h2>${r.nameEn?`<div class="p-text" style="font-size:20px;color:#6B6B60">${esc(r.nameEn)}</div>`:''}`});
-    /* [v5] شريحة التعريف كخريطة ذهنية */
     pres.slides.push({type:'def',html:`<div class="p-eyebrow">التعريف</div><div class="p-mindmap">${buildDefVisual(r.def)}</div>`});
     r.examples.forEach(ex=>{
       pres.slides.push({type:'ex',html:`<div class="p-eyebrow">مثال — ${esc(ex.sura)}: ${esc(String(ex.aya))}</div><div class="ayah">${ayahHTML(ex.t,{hl:ex.hl})}</div>${ex.note?`<div class="p-text" style="font-size:20px;color:#6B6B60;margin-top:18px">${esc(ex.note)}</div>`:''}`});
     });
-    // سؤال مع زر إظهار الإجابة
-    pres.slides.push({type:'q',mcq:r.mcq,name:r.nameAr});
+    if(r.mcq) pres.slides.push({type:'q',mcq:r.mcq,name:r.nameAr});
   });
+  if(!pres.slides.length){toast('لا توجد شرائح');return;}
   pres.i=0;
-  document.getElementById('present').classList.remove('hidden');
+  const el_pres=document.getElementById('present');
+  el_pres.classList.remove('hidden');
+  el_pres.style.display='flex';
   syncPresentTheme();
   renderSlide();
 }
@@ -4867,8 +4892,10 @@ function pMove(d){
   renderSlide();
 }
 function exitPresent(){
-  document.getElementById('present').classList.add('hidden');
-  openRule(pres.backRi);
+  const el_pres=document.getElementById('present');
+  el_pres.classList.add('hidden');
+  el_pres.style.display='';
+  openRule(pres.backRi||0);
 }
 
 /* ================= نافذة ================= */
@@ -5754,9 +5781,19 @@ async function renderAdminPanel(){
   var rows=users.map(function(u){
     var roleTag='<span class="pnl-role-tag '+u.role+'">'+({admin:'إدارة',teacher:'معلّم',student:'طالب'}[u.role]||u.role)+'</span>';
     var action='';
-    if(u.role==='student') action='<button class="pnl-btn promote" data-act="teacher" data-email="'+esc(u.email||'')+'">⬆ ترقية لمعلّم</button>';
-    else if(u.role==='teacher') action='<button class="pnl-btn demote" data-act="student" data-email="'+esc(u.email||'')+'">⬇ إعادة لطالب</button>';
-    else action='<span style="color:var(--soft);font-size:11px">—</span>';
+    if(u.role==='student'){
+      action='<div style="display:flex;gap:6px;flex-wrap:wrap">'+
+        '<button class="pnl-btn promote" data-act="teacher" data-email="'+esc(u.email||'')+'">⬆ معلّم</button>'+
+        '<button class="pnl-btn promote-admin" data-act="admin" data-email="'+esc(u.email||'')+'">🛡️ إدارة</button>'+
+      '</div>';
+    } else if(u.role==='teacher'){
+      action='<div style="display:flex;gap:6px;flex-wrap:wrap">'+
+        '<button class="pnl-btn demote" data-act="student" data-email="'+esc(u.email||'')+'">⬇ طالب</button>'+
+        '<button class="pnl-btn promote-admin" data-act="admin" data-email="'+esc(u.email||'')+'">🛡️ إدارة</button>'+
+      '</div>';
+    } else {
+      action='<span style="color:var(--soft);font-size:11px">—</span>';
+    }
     return '<tr>'+
       '<td>'+esc(u.full_name||'—')+'</td>'+
       '<td style="direction:ltr;text-align:right">'+esc(u.email||'')+'</td>'+
@@ -5777,7 +5814,7 @@ async function renderAdminPanel(){
       '</div>'+
       '<div class="pnl-section-title">👥 المستخدمون — اعتماد المعلّمين</div>'+
       '<input type="text" class="pnl-search" id="pnlSearch" placeholder="🔍 ابحث بالاسم أو البريد…">'+
-      '<div class="pnl-table-wrap"><table class="pnl-table">'+
+      '<div class="pnl-table-wrap sticky-hdr"><table class="pnl-table">'+
         '<thead><tr><th>الاسم</th><th>البريد</th><th>الدور</th><th style="text-align:center">أحكام منجزة</th><th>إجراء</th></tr></thead>'+
         '<tbody id="pnlBody">'+(rows||'<tr><td colspan="5" class="pnl-empty">لا مستخدمين بعد</td></tr>')+'</tbody>'+
       '</table></div>'+
@@ -5785,15 +5822,46 @@ async function renderAdminPanel(){
 
   document.getElementById('pnlBack').onclick=renderHome;
 
-  // ترقية/إعادة
-  p.querySelectorAll('.pnl-btn').forEach(function(b){
+  // دالة تأكيد الترقية لإدارة
+  function confirmAdminPromotion(email, callback){
+    var overlay=document.createElement('div');
+    overlay.className='pnl-confirm-modal';
+    overlay.innerHTML=
+      '<div class="pnl-confirm-box">'+
+        '<h3>⚠️ تأكيد ترقية الإدارة</h3>'+
+        '<p>هل تريد فعلاً ترقية <strong>'+esc(email)+'</strong> إلى إدارة؟<br>سيحصل على صلاحيات كاملة على المنصة.</p>'+
+        '<div class="pnl-confirm-btns">'+
+          '<button class="pnl-btn promote-admin" id="cfmYes">✅ نعم، ارقِّه</button>'+
+          '<button class="pnl-btn demote" id="cfmNo">إلغاء</button>'+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('#cfmYes').onclick=function(){ document.body.removeChild(overlay); callback(true); };
+    overlay.querySelector('#cfmNo').onclick=function(){ document.body.removeChild(overlay); callback(false); };
+  }
+
+  // ترقية/إعادة مع موافقة للإدارة
+  p.querySelectorAll('.pnl-btn[data-act]').forEach(function(b){
     b.onclick=async function(){
       var email=b.dataset.email, act=b.dataset.act;
+      if(act==='admin'){
+        confirmAdminPromotion(email, async function(confirmed){
+          if(!confirmed) return;
+          b.disabled=true;
+          try{
+            // ترقية مباشرة عبر SQL (الإدارة لا تحتاج RPC)
+            var {error}=await sb.from('profiles').update({role:'admin'}).eq('email',email);
+            if(error) throw error;
+            renderAdminPanel();
+          }catch(e){ alert('تعذّر: '+(e.message||'')); b.disabled=false; }
+        });
+        return;
+      }
       b.disabled=true; b.textContent='جارٍ…';
       try{
         if(act==='teacher') await mqSetRoleByEmail(email,'teacher');
         else await mqSetRoleByEmail(email,'student');
-        renderAdminPanel();   // إعادة تحميل
+        renderAdminPanel();
       }catch(e){ alert('تعذّر: '+(e.message||'')); b.disabled=false; }
     };
   });
