@@ -3919,7 +3919,7 @@ function renderHome(){
     ? `<button class="ht-icon-btn ht-panel-btn" id="htPanel" title="لوحة التحكم">${currentRole==='admin'?'🛡️ لوحة الإدارة':'👨‍🏫 لوحة المعلّم'}</button>`
     : '';
   topbar.innerHTML=
-    `<div class="ht-brand"><span class="ht-mark">مُتقِن</span><span class="ht-dot">·</span></div>`+
+    `<div class="ht-brand"><span class="ht-mark">مُتقِن</span><span class="ht-dot">·</span><span style="font-size:10px;color:var(--soft);margin-right:4px">v23.5</span></div>`+
     `<div class="ht-actions">`+
       panelBtn+
       `<button class="ht-icon-btn" id="htAbout" title="حول المنصة">ℹ️</button>`+
@@ -4359,7 +4359,9 @@ function openRule(i){
   examplesContent.style.display='flex';
   examplesContent.style.flexDirection='column';
   examplesContent.style.gap='10px';
-  r.examples.forEach((ex,ei)=>{
+  const exList = Array.isArray(r.examples) ? r.examples
+               : (r.mcq && Array.isArray(r.mcq.examples) ? r.mcq.examples : []);
+  exList.forEach((ex,ei)=>{
     const exc=el('div','ex-card');
     const ay=el('div','ayah');
     ay.innerHTML=ayahHTML(ex.t,{});
@@ -4384,7 +4386,7 @@ function openRule(i){
   });
   const exAcc=makeAccordion('📿','#FBF3DC',
     `أمثلة قرآنية`,
-    `${r.examples.length} ${r.examples.length===1?'مثال':'أمثلة'} من القرآن الكريم`,
+    `${exList.length} ${exList.length===1?'مثال':'أمثلة'} من القرآن الكريم`,
     examplesContent, false);
   card.appendChild(exAcc.section);
 
@@ -4841,7 +4843,9 @@ function enterPresent(){
   c.rules.forEach(r=>{
     pres.slides.push({type:'title',html:`<div class="p-eyebrow">${esc(c.name)}</div><h2>${esc(r.nameAr)}</h2>${r.nameEn?`<div class="p-text" style="font-size:20px;color:#6B6B60">${esc(r.nameEn)}</div>`:''}`});
     pres.slides.push({type:'def',html:`<div class="p-eyebrow">التعريف</div><div class="p-mindmap">${buildDefVisual(r.def)}</div>`});
-    r.examples.forEach(ex=>{
+    var exArr = Array.isArray(r.examples) ? r.examples
+              : (r.mcq && Array.isArray(r.mcq.examples) ? r.mcq.examples : []);
+    exArr.forEach(ex=>{
       pres.slides.push({type:'ex',html:`<div class="p-eyebrow">مثال — ${esc(ex.sura)}: ${esc(String(ex.aya))}</div><div class="ayah">${ayahHTML(ex.t,{hl:ex.hl})}</div>${ex.note?`<div class="p-text" style="font-size:20px;color:#6B6B60;margin-top:18px">${esc(ex.note)}</div>`:''}`});
     });
     if(r.mcq) pres.slides.push({type:'q',mcq:r.mcq,name:r.nameAr});
