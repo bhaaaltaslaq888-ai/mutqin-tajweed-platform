@@ -3870,19 +3870,18 @@ function award(stars,key){if(key&&S.aw[key])return;if(key)S.aw[key]=1;S.stars+=s
 function ayahHTML(text,opts){
   opts=opts||{};
   const words=text.replace(/﴿/g,'').replace(/﴾/g,'').trim().split(/\s+/);
-  // hl يدعم الفهرسة من 0 أو من 1 — نحوّل تلقائياً
   let hlSet=new Set();
   if(opts.hl&&opts.hl.length){
-    const min=Math.min(...opts.hl);
-    opts.hl.forEach(idx=>{
-      // إن كانت الفهرسة تبدأ من 1، نحوّلها لـ 0
-      hlSet.add(min>=1 ? idx-1 : idx);
-    });
+    let idxs=opts.hl.slice();
+    // إن كان أي مؤشر يساوي عدد الكلمات أو أكبر، فالفهرسة تبدأ من 1 → اطرح 1
+    const maxIdx=Math.max(...idxs);
+    if(maxIdx>=words.length){ idxs=idxs.map(x=>x-1); }
+    idxs.forEach(x=>{ if(x>=0 && x<words.length) hlSet.add(x); });
   }
   let h='';
   words.forEach((w,i)=>{
     const cls=['word'];
-    if(hlSet.size && hlSet.has(i)) cls.push('hl');
+    if(hlSet.has(i)) cls.push('hl');
     const attrs=opts.clickable?` tabindex="0" role="button" data-idx="${i}"`:'';
     h+=`<span class="${cls.join(' ')}"${attrs}>${esc(w)}</span>`;
     if(i<words.length-1)h+=' ';
@@ -3921,7 +3920,7 @@ function renderHome(){
     ? `<button class="ht-icon-btn ht-panel-btn" id="htPanel" title="لوحة التحكم">${currentRole==='admin'?'🛡️ لوحة الإدارة':'👨‍🏫 لوحة المعلّم'}</button>`
     : '';
   topbar.innerHTML=
-    `<div class="ht-brand"><span class="ht-mark">مُتقِن</span><span class="ht-dot">·</span><span style="font-size:10px;color:var(--soft);margin-right:4px">v23.10</span></div>`+
+    `<div class="ht-brand"><span class="ht-mark">مُتقِن</span><span class="ht-dot">·</span><span style="font-size:10px;color:var(--soft);margin-right:4px">v23.11</span></div>`+
     `<div class="ht-actions">`+
       panelBtn+
       `<button class="ht-icon-btn" id="htAbout" title="حول المنصة">ℹ️</button>`+
