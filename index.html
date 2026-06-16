@@ -3919,7 +3919,7 @@ function renderHome(){
     ? `<button class="ht-icon-btn ht-panel-btn" id="htPanel" title="لوحة التحكم">${currentRole==='admin'?'🛡️ لوحة الإدارة':'👨‍🏫 لوحة المعلّم'}</button>`
     : '';
   topbar.innerHTML=
-    `<div class="ht-brand"><span class="ht-mark">مُتقِن</span><span class="ht-dot">·</span><span style="font-size:10px;color:var(--soft);margin-right:4px">v23.5</span></div>`+
+    `<div class="ht-brand"><span class="ht-mark">مُتقِن</span><span class="ht-dot">·</span><span style="font-size:10px;color:var(--soft);margin-right:4px">v23.7</span></div>`+
     `<div class="ht-actions">`+
       panelBtn+
       `<button class="ht-icon-btn" id="htAbout" title="حول المنصة">ℹ️</button>`+
@@ -4447,8 +4447,12 @@ function openRule(i){
 }
 
 function buildExercise(r,state,onDone){
-  const ex=r.ex;
+  const ex=r.ex || (r.mcq && r.mcq.ex) || null;
   const wrap=el('div');
+  if(!ex){
+    wrap.appendChild(el('p','progress-label','لا يوجد تمرين تطبيقي لهذا الحكم.'));
+    return wrap;
+  }
   wrap.appendChild(el('p',null,esc(ex.q)));
   let tries=0;
 
