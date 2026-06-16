@@ -5724,9 +5724,24 @@ function loginUserSupa(email, role, profile){
    ════════════════════════════════════════════════════════════════ */
 async function renderAdminPanel(){
   var p=document.getElementById('panel');
-  p.innerHTML='<div class="pnl-inner"><div class="pnl-top"><div class="pnl-title">🛡️ لوحة الإدارة</div><button class="pnl-back" id="pnlBack">‹ عودة للرئيسية</button></div><div class="pnl-loading">جارٍ تحميل المستخدمين…</div></div>';
+  p.innerHTML='<div class="pnl-inner"><div class="pnl-top"><div class="pnl-title">🛡️ لوحة الإدارة</div><button class="pnl-back" id="pnlBack">‹ عودة للرئيسية</button></div><div class="pnl-loading">جارٍ الاتصال…</div></div>';
   show('panel');
   document.getElementById('pnlBack').onclick=renderHome;
+
+  // تسجيل دخول Supabase للإدارة إن لم تكن جلسة فعّالة
+  try{
+    var {data:{session}}=await sb.auth.getSession();
+    if(!session){
+      var r=await sb.auth.signInWithPassword({
+        email:'bhaaaltaslaq888@gmail.com',
+        password:ADMIN_PASSWORD
+      });
+      if(r.error) throw new Error('تعذّر الاتصال بـ Supabase: '+r.error.message+' — تأكد من إنشاء حساب الإدارة في Supabase Auth');
+    }
+  }catch(e){
+    p.querySelector('.pnl-loading').innerHTML='⚠️ '+e.message;
+    return;
+  }
 
   var users=[];
   try{ users=await mqAdminOverview(); }
