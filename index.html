@@ -2539,36 +2539,6 @@ body.dark #darkToggle:hover {
 .dyn-q-fb { font-size:13px;margin-top:8px;padding:6px 10px;border-radius:7px; }
 
 
-/* ===== مساعد المشاريع ===== */
-#assistant-view { padding:0; }
-.asst-header { display:flex;align-items:center;gap:12px;padding:20px 20px 0; }
-.asst-icon { font-size:28px; }
-.asst-title { font-size:18px;font-weight:700;color:var(--ink); }
-.asst-sub { font-size:13px;color:var(--soft);margin-top:2px; }
-.asst-body { padding:16px 20px; }
-.asst-input-wrap { display:flex;flex-direction:column;gap:10px;margin-bottom:14px; }
-.asst-textarea { width:100%;min-height:100px;padding:12px 14px;font-family:var(--ff-body);font-size:14px;line-height:1.75;color:var(--ink);background:var(--bg-warm);border:1px solid var(--line);border-radius:12px;resize:vertical;box-sizing:border-box;transition:border-color .2s; }
-.asst-textarea:focus { outline:none;border-color:var(--teal); }
-.asst-send { align-self:flex-end;background:var(--teal);color:#fff;border:none;border-radius:10px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s; }
-.asst-send:hover { background:var(--teal-dark); }
-.asst-send:disabled { background:var(--muted);cursor:not-allowed; }
-.asst-messages { display:flex;flex-direction:column;gap:12px;max-height:420px;overflow-y:auto;padding-right:4px; }
-.asst-msg { border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.85; }
-.asst-msg.user { background:var(--teal-pale);border:1px solid rgba(30,107,90,.15);margin-right:20px; }
-.asst-msg.ai { background:var(--card);border:1px solid var(--line);margin-left:20px; }
-.asst-msg.ai pre { background:var(--bg);padding:8px 10px;border-radius:8px;font-size:12px;overflow-x:auto;white-space:pre-wrap; }
-.asst-typing { display:flex;gap:5px;align-items:center;padding:8px 14px; }
-.asst-typing span { width:7px;height:7px;background:var(--teal);border-radius:50%;animation:asst-bounce .9s infinite; }
-.asst-typing span:nth-child(2){animation-delay:.15s}
-.asst-typing span:nth-child(3){animation-delay:.3s}
-@keyframes asst-bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
-.asst-examples { display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px; }
-.asst-chip { background:var(--teal-pale);border:1px solid rgba(30,107,90,.2);border-radius:8px;padding:5px 12px;font-size:12.5px;color:var(--teal-dark);cursor:pointer;transition:all .15s; }
-.asst-chip:hover { background:var(--teal);color:#fff; }
-.asst-api-note { font-size:12px;color:var(--muted);text-align:center;padding:8px 0; }
-.asst-api-input { width:100%;padding:8px 12px;font-size:13px;font-family:inherit;border:1px solid var(--line);border-radius:8px;background:var(--bg-warm);color:var(--ink);box-sizing:border-box;margin-bottom:8px; }
-.asst-api-input:focus { outline:none;border-color:var(--teal); }
-
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="mutqin_supabase.js"></script>
@@ -4159,11 +4129,6 @@ function renderHome(){
     `</div>`;
   inner.appendChild(footer);
 
-  
-  const asstBtn=el('button','btn','\ud83e\udde0 مساعد متقن');
-  asstBtn.style.cssText='display:block;margin:20px auto 0;font-size:14px;background:var(--teal-pale);color:var(--teal-dark);border:1px solid rgba(30,107,90,.25)';
-  asstBtn.onclick=()=>{asstHistory=[];document.getElementById('asst-messages').innerHTML='';show('assistant');};
-  inner.appendChild(asstBtn);
   h.appendChild(inner);
 
   /* ربط الأحداث */
@@ -5557,7 +5522,8 @@ function renderRolePick(){
 /* الشاشة 2: نموذج الدخول حسب الدور */
 function renderRoleLogin(role){
   if(role==='student') return renderStudentLogin();
-  return renderSupaLogin(role, 'signin');   // المعلّم والأدمن: عبر Supabase
+  if(role==='admin')   return renderAdminLogin();
+  return renderSupaLogin(role, 'signin');   // المعلّم فقط: عبر Supabase
 }
 
 /* ───── دخول الطالب (محلي — بريد فقط) ───── */
@@ -5601,22 +5567,64 @@ function renderStudentLogin(){
   inp.focus();
 }
 
-/* ───── دخول/تسجيل المعلّم والأدمن (عبر Supabase) ───── */
+/* ───── دخول الإدارة (محلي — بريد ثابت + كلمة سر ثابتة) ───── */
+function renderAdminLogin(){
+  var l=document.getElementById('login');
+  l.innerHTML=
+    '<div class="login-box">'+
+      '<button class="login-back" id="loginBack">‹ رجوع</button>'+
+      '<div class="login-role-badge admin">🛡️ إدارة</div>'+
+      '<div class="login-brand" style="font-size:38px">دخول الإدارة</div>'+
+      '<div class="login-sep" style="margin:18px 0"></div>'+
+      '<label class="login-label">البريد الإلكتروني</label>'+
+      '<input type="email" class="login-input" id="loginEmail" placeholder="example@email.com" autocomplete="email" value="">'+
+      '<label class="login-label" style="margin-top:14px">كلمة السر</label>'+
+      '<input type="password" class="login-input" id="loginPw" placeholder="••••••••" autocomplete="current-password">'+
+      '<div class="login-errmsg" id="loginErr"></div>'+
+      '<button class="btn login-btn" id="loginSubmit">دخول ➜</button>'+
+    '</div>';
+
+  var inp=document.getElementById('loginEmail');
+  var pw=document.getElementById('loginPw');
+  var errEl=document.getElementById('loginErr');
+
+  var doLogin=function(){
+    var email=inp.value.trim().toLowerCase();
+    var pass=pw.value;
+    if(email!=='bhaaaltaslaq888@gmail.com'){
+      inp.classList.add('err');
+      errEl.textContent='البريد غير مصرّح له كإدارة';
+      return;
+    }
+    if(pass!==ADMIN_PASSWORD){
+      pw.classList.add('err');
+      errEl.textContent='كلمة السر غير صحيحة';
+      return;
+    }
+    loginUser(email,'admin');
+  };
+
+  inp.oninput=function(){inp.classList.remove('err');errEl.textContent='';};
+  pw.oninput=function(){pw.classList.remove('err');errEl.textContent='';};
+  pw.onkeydown=function(e){if(e.key==='Enter')doLogin();};
+  document.getElementById('loginSubmit').onclick=doLogin;
+  document.getElementById('loginBack').onclick=renderRolePick;
+  inp.focus();
+}
+
+/* ───── دخول/تسجيل المعلّم (عبر Supabase) ───── */
 function renderSupaLogin(role, mode){
   var l=document.getElementById('login');
-  var meta={
-    admin:  {icon:'🛡️', label:'الإدارة', badge:'إدارة', cls:'admin'},
-    teacher:{icon:'👨‍🏫', label:'المعلّم', badge:'معلّم', cls:'teacher'}
-  }[role];
+  var meta={ icon:'👨‍🏫', label:'المعلّم', badge:'معلّم', cls:'teacher' };
 
-  var pendingNote = (role==='teacher' && mode==='signup')
+  var pendingNote = (mode==='signup')
     ? '<div class="login-pending">📌 بعد التسجيل ستدخل كـ«طالب» مؤقتًا. أبلغ الإدارة باعتماد بريدك معلّمًا، ثم أعد الدخول.</div>'
     : '';
 
   l.innerHTML=
     '<div class="login-box">'+
       '<button class="login-back" id="loginBack">‹ رجوع</button>'+
-      '<div class="login-role-badge '+meta.cls+'">'+meta.icon+' '+meta.badge+'</div>'+
+      '<div class="login-role-badge teacher">'+meta.icon+' '+meta.badge+'</div>'+
       '<div class="login-brand" style="font-size:34px">'+(mode==='signin'?'تسجيل الدخول':'إنشاء حساب')+'</div>'+
       '<div class="login-tabs">'+
         '<button class="login-tab '+(mode==='signin'?'active':'')+'" id="tabSignin">دخول</button>'+
@@ -5657,17 +5665,10 @@ function renderSupaLogin(role, mode){
       } else {
         await mqSignIn(email, pass);
       }
-      // تحقّق من الدور الفعلي من Supabase
-      var profile = MQ.profile;
-      var realRole = profile ? profile.role : 'student';
-
-      if(role==='admin' && realRole!=='admin'){
-        await mqSignOut();
-        setErr('هذا الحساب ليس إدارة. تواصل مع المسؤول.');
-        btn.disabled=false; btn.textContent='دخول ➜'; return;
-      }
-      // المعلّم: إن لم يُعتمد بعد، يدخل كطالب مع تنبيه
-      if(role==='teacher' && realRole==='student'){
+      var profile=MQ.profile;
+      var realRole=profile ? profile.role : 'student';
+      // إن لم يُعتمد بعد يدخل كطالب مع تنبيه
+      if(realRole==='student'){
         alert('حسابك لم يُعتمد معلّمًا بعد. ستدخل كطالب — أبلغ الإدارة باعتماد بريدك.');
       }
       loginUserSupa(email, realRole, profile);
@@ -5675,7 +5676,7 @@ function renderSupaLogin(role, mode){
       var msg=(err&&err.message)?err.message:'تعذّر الدخول';
       if(/Invalid login/i.test(msg)) msg='البريد أو كلمة السر غير صحيحة';
       if(/already registered/i.test(msg)) msg='هذا البريد مسجّل — استخدم «دخول»';
-      if(/Email not confirmed/i.test(msg)) msg='يلزم تأكيد البريد أولًا (راجع إعدادات Supabase)';
+      if(/Email not confirmed/i.test(msg)) msg='يلزم تأكيد البريد أولًا (راجع Supabase → Auth → Providers → تعطيل Confirm email)';
       setErr(msg);
       btn.disabled=false; btn.textContent=(mode==='signin'?'دخول ➜':'إنشاء الحساب ➜');
     }
@@ -5789,6 +5790,48 @@ async function renderAdminPanel(){
     p.querySelectorAll('#pnlBody tr').forEach(function(tr){
       tr.style.display = tr.textContent.toLowerCase().includes(q)?'':'none';
     });
+  };
+
+  // قسم تغيير كلمة السر لحسابات المعلمين
+  var pwSection=document.createElement('div');
+  pwSection.style.cssText='margin-top:32px;';
+  pwSection.innerHTML=
+    '<div class="pnl-section-title">🔑 تغيير كلمة سر حساب معلّم</div>'+
+    '<div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;max-width:480px">'+
+      '<label class="login-label">بريد المعلّم</label>'+
+      '<input type="email" class="pnl-search" id="pwEmail" placeholder="teacher@email.com" style="margin-bottom:12px">'+
+      '<label class="login-label">كلمة السر الجديدة</label>'+
+      '<input type="password" class="pnl-search" id="pwNew" placeholder="٦ أحرف على الأقل" style="margin-bottom:12px">'+
+      '<label class="login-label">تأكيد كلمة السر</label>'+
+      '<input type="password" class="pnl-search" id="pwConfirm" placeholder="أعد الكتابة" style="margin-bottom:14px">'+
+      '<div id="pwMsg" style="font-size:13px;margin-bottom:10px;min-height:18px"></div>'+
+      '<button class="pnl-btn promote" id="pwSubmit" style="width:100%;padding:12px">تغيير كلمة السر ➜</button>'+
+    '</div>';
+  p.querySelector('.pnl-inner').appendChild(pwSection);
+
+  document.getElementById('pwSubmit').onclick=async function(){
+    var email=document.getElementById('pwEmail').value.trim().toLowerCase();
+    var pw1=document.getElementById('pwNew').value;
+    var pw2=document.getElementById('pwConfirm').value;
+    var msg=document.getElementById('pwMsg');
+    msg.style.color='var(--err)';
+    if(!email){ msg.textContent='أدخل البريد الإلكتروني'; return; }
+    if(!pw1||pw1.length<6){ msg.textContent='كلمة السر ٦ أحرف على الأقل'; return; }
+    if(pw1!==pw2){ msg.textContent='كلمتا السر غير متطابقتين'; return; }
+    msg.style.color='var(--soft)'; msg.textContent='جارٍ التغيير…';
+    document.getElementById('pwSubmit').disabled=true;
+    try{
+      // استدعاء Supabase Admin API عبر RPC
+      var {error}=await sb.rpc('admin_set_password',{p_email:email, p_password:pw1});
+      if(error) throw error;
+      msg.style.color='var(--teal-dark)'; msg.textContent='✅ تم تغيير كلمة السر بنجاح';
+      document.getElementById('pwEmail').value='';
+      document.getElementById('pwNew').value='';
+      document.getElementById('pwConfirm').value='';
+    }catch(e){
+      msg.style.color='var(--err)'; msg.textContent='تعذّر: '+(e.message||'خطأ غير معروف');
+    }
+    document.getElementById('pwSubmit').disabled=false;
   };
 }
 
@@ -5983,103 +6026,6 @@ function buildDynQuestion(r, container) {
 }
 
 
-/* ===== مساعد مُتقِن ===== */
-const ASST_SYSTEM = `أنت مساعد متخصّص في علم التجويد وتعليم القرآن الكريم.
-تجيب باللغة العربية بأسلوب علمي دقيق ومبسّط.
-عند تخطيط المشاريع والمقررات: تستخدم الجداول والقوائم المنظّمة.
-مصدرك الأساسي: كتاب المنير في أحكام التجويد.
-لا تتجاوز 400 كلمة في الردّ إلا إذا طُلب تفصيل.`;
-
-let asstHistory = [];
-
-function asstFill(text) {
-  document.getElementById('asst-input').value = text;
-  document.getElementById('asst-input').focus();
-}
-
-function asstAddMsg(role, text) {
-  const box = document.getElementById('asst-messages');
-  const msg = el('div', 'asst-msg ' + role);
-  // تحويل ** bold ** و줄바꿈
-  msg.innerHTML = esc(text)
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\n/g, '<br>');
-  box.appendChild(msg);
-  box.scrollTop = box.scrollHeight;
-  return msg;
-}
-
-function asstTyping() {
-  const box = document.getElementById('asst-messages');
-  const t = el('div', 'asst-typing');
-  t.innerHTML = '<span></span><span></span><span></span>';
-  box.appendChild(t);
-  box.scrollTop = box.scrollHeight;
-  return t;
-}
-
-async function asstSend() {
-  const inp = document.getElementById('asst-input');
-  const text = inp.value.trim();
-  if (!text) return;
-
-  const apiKey = document.getElementById('asst-api-key').value.trim();
-  const btn = document.getElementById('asst-send-btn');
-
-  asstAddMsg('user', text);
-  asstHistory.push({ role: 'user', content: text });
-  inp.value = '';
-  btn.disabled = true;
-
-  const typing = asstTyping();
-
-  try {
-    const headers = { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' };
-    if (apiKey) headers['x-api-key'] = apiKey;
-
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1024,
-        system: ASST_SYSTEM,
-        messages: asstHistory.slice(-10)
-      })
-    });
-
-    typing.remove();
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      if (res.status === 401) {
-        asstAddMsg('ai', '⚠️ المفتاح غير صحيح أو مفقود. أضف مفتاح Anthropic API في الحقل أعلاه.');
-      } else {
-        asstAddMsg('ai', '⚠️ خطأ في الاتصال: ' + (err.error?.message || res.status));
-      }
-      btn.disabled = false;
-      return;
-    }
-
-    const data = await res.json();
-    const reply = data.content?.[0]?.text || '(لا يوجد ردّ)';
-    asstHistory.push({ role: 'assistant', content: reply });
-    asstAddMsg('ai', reply);
-
-  } catch(e) {
-    typing.remove();
-    asstAddMsg('ai', '⚠️ تعذّر الاتصال بالخادم. تأكّد من الاتصال بالإنترنت.');
-  }
-
-  btn.disabled = false;
-}
-
-// إرسال بـ Ctrl+Enter
-document.addEventListener('keydown', e => {
-  if (e.ctrlKey && e.key === 'Enter' && document.getElementById('asst-input') === document.activeElement) {
-    asstSend();
-  }
-});
 
 function initApp(){
   // Dark mode persistence
@@ -6165,37 +6111,6 @@ document.addEventListener('keydown',e=>{
 initApp();
 
 </script>
-
-<div id="assistant" class="view hidden">
-  <div class="asst-header">
-    <div class="asst-icon">🧠</div>
-    <div>
-      <div class="asst-title">مساعد مُتقِن</div>
-      <div class="asst-sub">اسأل عن التجويد · ولّد محتوى · خطّط مشاريعك</div>
-    </div>
-    <button class="btn" style="margin-right:auto;font-size:12px;padding:6px 14px" onclick="show('home')">← رئيسية</button>
-  </div>
-  <div class="asst-body">
-    <div style="margin-bottom:10px">
-      <label style="font-size:12px;color:var(--soft)">مفتاح Anthropic API (اختياري — يُستخدم محليًّا فقط)</label>
-      <input type="password" id="asst-api-key" class="asst-api-input" placeholder="sk-ant-..." autocomplete="off">
-    </div>
-    <div style="font-size:12.5px;color:var(--soft);margin-bottom:8px">أمثلة سريعة:</div>
-    <div class="asst-examples">
-      <span class="asst-chip" onclick="asstFill('اشرح لي حكم الإخفاء الحقيقي بأسلوب مبسّط')">شرح الإخفاء</span>
-      <span class="asst-chip" onclick="asstFill('ما الفرق بين الإدغام بغنة والإدغام بلا غنة؟')">الإدغام</span>
-      <span class="asst-chip" onclick="asstFill('اعطني 5 أسئلة اختبار على أحكام المدود')">أسئلة المدود</span>
-      <span class="asst-chip" onclick="asstFill('خطّط لي درسًا عن الوقف والابتداء لطلاب المرحلة المتوسطة')">تخطيط درس</span>
-      <span class="asst-chip" onclick="asstFill('أريد بناء مقرر تجويد من 12 حصة — ساعدني في الخطة')">مشروع مقرر</span>
-    </div>
-    <div class="asst-messages" id="asst-messages"></div>
-    <div class="asst-input-wrap" style="margin-top:12px">
-      <textarea class="asst-textarea" id="asst-input" placeholder="اكتب سؤالك أو مشروعك..." rows="3"></textarea>
-      <button class="asst-send" id="asst-send-btn" onclick="asstSend()">إرسال ✦</button>
-    </div>
-    <div class="asst-api-note">الرسائل لا تُرسَل لأي طرف خارجي إلا Anthropic API · لا يُحفظ المفتاح</div>
-  </div>
-</div>
 
 </body>
 </html>
