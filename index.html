@@ -1027,7 +1027,7 @@ button {
   padding: 32px;
   box-shadow: var(--shadow-sm);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 .rule-card::before {
   content: '';
@@ -1036,6 +1036,8 @@ button {
   width: 200px; height: 200px;
   background: radial-gradient(circle at top right, var(--teal-glow), transparent 70%);
   pointer-events: none;
+  border-radius: var(--r-xl);
+  overflow: hidden;
 }
 
 .rule-head {
@@ -3919,7 +3921,7 @@ function renderHome(){
     ? `<button class="ht-icon-btn ht-panel-btn" id="htPanel" title="لوحة التحكم">${currentRole==='admin'?'🛡️ لوحة الإدارة':'👨‍🏫 لوحة المعلّم'}</button>`
     : '';
   topbar.innerHTML=
-    `<div class="ht-brand"><span class="ht-mark">مُتقِن</span><span class="ht-dot">·</span><span style="font-size:10px;color:var(--soft);margin-right:4px">v23.8</span></div>`+
+    `<div class="ht-brand"><span class="ht-mark">مُتقِن</span><span class="ht-dot">·</span><span style="font-size:10px;color:var(--soft);margin-right:4px">v23.10</span></div>`+
     `<div class="ht-actions">`+
       panelBtn+
       `<button class="ht-icon-btn" id="htAbout" title="حول المنصة">ℹ️</button>`+
@@ -3976,16 +3978,32 @@ function renderHome(){
   });
   if(resumeCid){
     const rc=COURSES[resumeCid];
-    const dn=(S.done[resumeCid]||[]).length;
+    const doneIds=S.done[resumeCid]||[];
+    const dn=doneIds.length;
     const tot=rc.rules.length;
+    // آخر حكم غير مكتمل
+    let resumeRi=0;
+    for(let i=0;i<rc.rules.length;i++){
+      if(!doneIds.includes(rc.rules[i].id)){resumeRi=i;break;}
+      resumeRi=i;
+    }
+    const resumeRule=rc.rules[resumeRi];
     const resume=el('button','home-resume');
     resume.style.setProperty('--rc',rc.color||'var(--teal)');
     resume.innerHTML=
       `<div class="hr-left"><div class="hr-eyebrow">${dn===0?'ابدأ رحلتك':'تابِع من حيث وقفت'}</div>`+
       `<div class="hr-title">${rc.icon||'📘'} ${esc(rc.name)}</div>`+
-      `<div class="hr-meta">${dn} من ${tot} حكمًا</div></div>`+
+      `<div class="hr-meta">${dn===0?`${tot} حكمًا`:`وقفت عند: ${esc(resumeRule.nameAr)}`}</div></div>`+
       `<div class="hr-cta">${dn===0?'ابدأ الآن':'متابعة'} ←</div>`;
-    resume.onclick=()=>openCourse(resumeCid);
+    resume.onclick=()=>{
+      cur={cid:resumeCid,ri:resumeRi};
+      const c=COURSES[resumeCid];
+      show('course');
+      if(c.soon||!c.rules||!c.rules.length){ renderHeader(); return; }
+      renderHeader();
+      renderNav();
+      openRule(resumeRi);
+    };
     inner.appendChild(resume);
   }
 
