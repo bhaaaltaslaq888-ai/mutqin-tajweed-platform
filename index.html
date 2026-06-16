@@ -5703,7 +5703,6 @@ function renderSupaLogin(role, mode){
       var msg=(err&&err.message)?err.message:'تعذّر الدخول';
       if(/Invalid login/i.test(msg)) msg='البريد أو كلمة السر غير صحيحة';
       if(/already registered/i.test(msg)) msg='هذا البريد مسجّل — استخدم «دخول»';
-      if(/Email not confirmed/i.test(msg)) msg='يلزم تأكيد البريد أولًا (راجع Supabase → Auth → Providers → تعطيل Confirm email)';
       setErr(msg);
       btn.disabled=false; btn.textContent=(mode==='signin'?'دخول ➜':'إنشاء الحساب ➜');
     }
