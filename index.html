@@ -2835,6 +2835,197 @@ body.dark #darkToggle:hover {
 .fc-launch-title { font-size: 14px; font-weight: 700; color: var(--warn); }
 .fc-launch-sub { font-size: 12px; color: var(--soft); margin-top: 2px; }
 
+/* ══════════════════════════════════════════════════════════════
+   ميزات جديدة — SR / Daily Challenge / Focus / Timed / Analytics
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── التحدي اليومي ── */
+.daily-challenge-card {
+  background: linear-gradient(135deg, var(--teal-pale), var(--card));
+  border: 1.5px solid rgba(30,107,90,.2);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.daily-challenge-card::before {
+  content: '';
+  position: absolute;
+  top: -30px; left: -30px;
+  width: 100px; height: 100px;
+  background: radial-gradient(circle, var(--teal-glow), transparent 70%);
+  pointer-events: none;
+}
+.dc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.dc-badge {
+  background: var(--teal); color: #fff;
+  font-size: 10px; font-weight: 800; letter-spacing: .8px;
+  padding: 3px 10px; border-radius: 99px;
+  text-transform: uppercase;
+}
+.dc-date { font-size: 11px; color: var(--muted); }
+.dc-q { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 10px; line-height: 1.6; }
+.dc-opts { display: flex; flex-direction: column; gap: 6px; }
+.dc-opt {
+  background: var(--card); border: 1.5px solid var(--line);
+  border-radius: var(--r-md); padding: 9px 13px;
+  font-size: 13px; cursor: pointer; text-align: right;
+  transition: all var(--fast); font-family: inherit; color: var(--ink);
+}
+.dc-opt:hover { border-color: var(--teal); background: var(--teal-pale); }
+.dc-opt.dc-right { background: var(--ok-pale); border-color: var(--ok); color: var(--ok); font-weight: 700; }
+.dc-opt.dc-wrong { background: var(--err-pale); border-color: var(--err); color: var(--err); }
+.dc-result {
+  margin-top: 10px; padding: 9px 13px;
+  border-radius: var(--r-md); font-size: 13px; line-height: 1.6;
+}
+.dc-result.ok { background: var(--ok-pale); color: var(--ok); border: 1px solid rgba(30,122,58,.2); }
+.dc-result.err { background: var(--err-pale); color: var(--err); border: 1px solid rgba(176,48,32,.2); }
+
+/* ── مؤشر التكرار المتباعد (SR) ── */
+.sr-widget {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--r-lg); padding: 12px 18px;
+  margin-bottom: 10px; cursor: pointer;
+  transition: all var(--fast);
+  position: relative; overflow: hidden;
+}
+.sr-widget::before {
+  content: '';
+  position: absolute; right: 0; top: 0; bottom: 0; width: 4px;
+  background: linear-gradient(to bottom, #5c6bc0, #3f51b5);
+  border-radius: 0 var(--r-lg) var(--r-lg) 0;
+}
+.sr-widget:hover { border-color: #5c6bc0; box-shadow: 0 4px 16px rgba(92,107,192,.15); }
+.sr-icon { font-size: 26px; flex-shrink: 0; }
+.sr-info { flex: 1; }
+.sr-title { font-size: 13px; font-weight: 700; color: var(--ink-mid); }
+.sr-sub { font-size: 12px; color: var(--soft); margin-top: 2px; }
+.sr-count {
+  font-size: 20px; font-weight: 800; color: #5c6bc0;
+  flex-shrink: 0;
+}
+
+/* ── وضع التركيز ── */
+body.focus-mode #ruleNav { display: none !important; }
+body.focus-mode #courseBody { max-width: 780px; }
+.focus-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--line-light); border: 1px solid var(--line);
+  border-radius: var(--r-md); padding: 7px 12px;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  color: var(--soft); transition: all var(--fast); font-family: inherit;
+}
+.focus-toggle:hover, body.focus-mode .focus-toggle {
+  background: var(--teal); color: #fff; border-color: var(--teal);
+}
+
+/* ── اختبار الزمن ── */
+.timed-timer {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: var(--card); border: 2px solid var(--teal);
+  border-radius: var(--r-xl); padding: 14px 24px;
+  margin-bottom: 20px; position: sticky; top: 120px; z-index: 10;
+  box-shadow: var(--shadow-md);
+}
+.timed-timer.warn { border-color: var(--err); }
+.timer-display {
+  font-size: 32px; font-weight: 800; color: var(--teal-dark);
+  font-variant-numeric: tabular-nums; letter-spacing: -1px;
+}
+.timed-timer.warn .timer-display { color: var(--err); animation: pulse .5s infinite alternate; }
+@keyframes pulse { from { opacity: 1; } to { opacity: .5; } }
+.timer-label { font-size: 12px; color: var(--soft); font-weight: 600; }
+.timed-score-live {
+  font-size: 13px; font-weight: 700; color: var(--teal-dark);
+  background: var(--teal-pale); padding: 4px 12px; border-radius: 99px;
+}
+
+/* ── مراجعة الأخطاء ── */
+.mistakes-launch-btn {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; padding: 13px 18px;
+  background: var(--card); border: 1.5px dashed var(--err);
+  border-radius: var(--r-lg); cursor: pointer;
+  transition: all var(--mid); text-align: right;
+  margin-bottom: 10px;
+}
+.mistakes-launch-btn:hover {
+  background: var(--err-pale); transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.ml-icon { font-size: 24px; flex-shrink: 0; }
+.ml-info { flex: 1; }
+.ml-title { font-size: 14px; font-weight: 700; color: var(--err); }
+.ml-sub { font-size: 12px; color: var(--soft); margin-top: 2px; }
+
+/* ── لوحة التحليل ── */
+.analytics-card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--r-lg); padding: 16px 18px;
+  margin-bottom: 10px;
+}
+.analytics-title {
+  font-size: 13px; font-weight: 800; color: var(--ink-mid);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 7px;
+}
+.analytics-row {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 8px; font-size: 12.5px;
+}
+.analytics-row-lbl { flex: 1; color: var(--ink-mid); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.analytics-bar-wrap { flex: 2; height: 6px; background: var(--line-light); border-radius: 99px; overflow: hidden; }
+.analytics-bar-fill { height: 100%; border-radius: 99px; }
+.analytics-pct { font-size: 11px; font-weight: 700; width: 34px; text-align: left; flex-shrink: 0; }
+
+/* ── مقارنة حكمين ── */
+.compare-view {
+  position: fixed; inset: 0; background: var(--bg);
+  z-index: 200; overflow-y: auto; padding: 80px 16px 40px;
+}
+.compare-header {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: var(--glass); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  z-index: 10;
+}
+.compare-cols {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  max-width: 1000px; margin: 0 auto;
+}
+@media(max-width:640px){ .compare-cols{grid-template-columns:1fr;} }
+.compare-col {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--r-lg); padding: 20px;
+}
+.compare-col-title {
+  font-size: 16px; font-weight: 800; color: var(--teal-dark);
+  margin-bottom: 12px; padding-bottom: 10px;
+  border-bottom: 2px solid var(--teal);
+}
+.compare-col-def { font-size: 13.5px; line-height: 1.85; color: var(--ink-mid); }
+.compare-col-select {
+  width: 100%; padding: 10px 12px; border: 1.5px solid var(--line);
+  border-radius: var(--r-md); font-size: 13px; font-family: inherit;
+  direction: rtl; background: var(--card); color: var(--ink); outline: none;
+  margin-bottom: 14px;
+}
+.compare-col-select:focus { border-color: var(--teal); }
+
+/* ── زر التحدي اليومي في الشريط ── */
+.dc-launch-btn {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; padding: 13px 18px;
+  background: var(--card); border: 1.5px solid var(--teal);
+  border-radius: var(--r-lg); cursor: pointer;
+  transition: all var(--mid); text-align: right; margin-bottom: 10px;
+}
+.dc-launch-btn:hover { background: var(--teal-pale); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="mutqin_supabase.js"></script>
@@ -2849,6 +3040,12 @@ body.dark #darkToggle:hover {
 
 <!-- وضع البطاقات التعليمية -->
 <div id="flashcardView" class="hidden"></div>
+
+<!-- وضع المقارنة -->
+<div id="compareView" class="compare-view hidden"></div>
+
+<!-- اختبار الزمن -->
+<div id="timedQuizView" class="view hidden"></div>
 
 <!-- لوحة التحكم (إدارة / معلّم) -->
 <div id="panel" class="view hidden"></div>
@@ -4130,7 +4327,7 @@ let currentEmail=null;
 let currentRole=null;            // 'admin' | 'teacher' | 'student'
 let currentProfile=null;         // ملف Supabase للمعلّم/الأدمن
 const ADMIN_PASSWORD='@bahaa123'; // (احتياطي — لم يعد يُستخدم بعد ربط Supabase)
-let S={done:{c1:[],c2:[],c3:[]},exam:{c1:null,c2:null,c3:null},passed:{c1:false,c2:false,c3:false},stars:0,medals:[],aw:{},streak:0,lastLoginDate:null,dailyGoal:3,dailyDone:0,dailyDate:null};
+let S={done:{c1:[],c2:[],c3:[]},exam:{c1:null,c2:null,c3:null},passed:{c1:false,c2:false,c3:false},stars:0,medals:[],aw:{},streak:0,lastLoginDate:null,dailyGoal:3,dailyDone:0,dailyDate:null,sr:{},mistakes:[],dailyChallenge:{date:null,qIdx:null,answered:false,correct:false,userAns:null}};
 let cur={cid:null, ri:0};          // الدورة والحكم الحالي
 let pres={slides:[], i:0, backRi:0};// وضع العرض
 
@@ -4142,9 +4339,12 @@ function load(){
       s.dailyGoal   = s.dailyGoal||3;
       s.dailyDone   = s.dailyDone||0;
       s.dailyDate   = s.dailyDate||null;
+      s.sr          = s.sr||{};
+      s.mistakes    = s.mistakes||[];
+      s.dailyChallenge = s.dailyChallenge||{date:null,qIdx:null,answered:false,correct:false,userAns:null};
       return s;
     }}catch(e){}
-  return {done:{c1:[],c2:[],c3:[]}, exam:{c1:null,c2:null,c3:null}, passed:{c1:false,c2:false,c3:false}, stars:0, medals:[], aw:{}, streak:0, lastLoginDate:null, dailyGoal:3, dailyDone:0, dailyDate:null};
+  return {done:{c1:[],c2:[],c3:[]}, exam:{c1:null,c2:null,c3:null}, passed:{c1:false,c2:false,c3:false}, stars:0, medals:[], aw:{}, streak:0, lastLoginDate:null, dailyGoal:3, dailyDone:0, dailyDate:null, sr:{}, mistakes:[], dailyChallenge:{date:null,qIdx:null,answered:false,correct:false,userAns:null}};
 }
 function save(){try{localStorage.setItem(LS_KEY,JSON.stringify(S));}catch(e){}}
 
@@ -4172,6 +4372,348 @@ function updateStreak(){
   if(S.streak===30) award(5,'streak30');
   save();
   if(S.streak>1) setTimeout(()=>toast('🔥 '+S.streak+' أيام متتالية — رائع!'),800);
+}
+
+/* ════ نظام التكرار المتباعد (Spaced Repetition) ════ */
+// المستويات: 0=جديد 1=مرّة أخرى(1يوم) 2=جيد(3أيام) 3=رائع(7أيام) 4=متقن(30يوماً)
+const SR_INTERVALS=[0,1,3,7,30];
+function updateSR(ruleId,correct){
+  const now=Date.now();
+  const entry=S.sr[ruleId]||{level:0,nextReview:now,ease:2.5};
+  if(correct){
+    entry.level=Math.min(4,entry.level+1);
+    entry.ease=Math.min(3,entry.ease+0.1);
+  }else{
+    entry.level=Math.max(0,entry.level-1);
+    entry.ease=Math.max(1.3,entry.ease-0.3);
+  }
+  const days=SR_INTERVALS[entry.level];
+  entry.nextReview=now+days*86400000;
+  S.sr[ruleId]=entry;
+  save();
+}
+function getDueRules(){
+  const now=Date.now();
+  const due=[];
+  ['c1','c2','c3'].forEach(cid=>{
+    const c=COURSES[cid];
+    if(!c||!c.rules||c.soon)return;
+    c.rules.forEach(r=>{
+      if(!(S.done[cid]&&S.done[cid].includes(r.id)))return;
+      const entry=S.sr[r.id];
+      if(!entry||entry.nextReview<=now) due.push({r,cid});
+    });
+  });
+  return due;
+}
+function showSRReview(){
+  const due=getDueRules();
+  if(!due.length){toast('لا توجد أحكام مقرّرة للمراجعة اليوم — تفضّل!');return;}
+  // ابنِ اختباراً MCQ من الأحكام المستحقة
+  const questions=[];
+  due.slice(0,10).forEach(({r,cid})=>{
+    if(r.mcq&&r.mcq.q){
+      questions.push({q:r.mcq.q,opts:r.mcq.opts,a:r.mcq.a,reason:r.mcq.reason||'',ruleId:r.id,cid,ruleName:r.nameAr});
+    }
+  });
+  if(!questions.length){toast('لا توجد أسئلة MCQ للأحكام المستحقة');return;}
+  startSRSession(questions);
+}
+function startSRSession(questions){
+  const v=document.getElementById('timedQuizView');
+  v.innerHTML='';
+  v.className='view';
+  show('timedQuizView');
+  const hdr=el('div','compare-header');
+  hdr.innerHTML=`<div style="font-size:15px;font-weight:800;color:var(--teal-dark)">🔁 مراجعة التكرار المتباعد</div><div style="font-size:13px;color:var(--soft)">${questions.length} أحكام للمراجعة</div><button class="fc-close" onclick="show('home');renderHome()">✕ خروج</button>`;
+  v.appendChild(hdr);
+  const wrap=el('div');wrap.style.cssText='max-width:680px;margin:80px auto 40px;padding:0 16px';
+  let qi=0,correct=0;
+  function showQ(){
+    if(qi>=questions.length){finishSR(correct,questions.length);return;}
+    const q=questions[qi];
+    wrap.innerHTML=`<div style="font-size:12px;color:var(--soft);margin-bottom:8px">السؤال ${qi+1} / ${questions.length} — <strong>${esc(q.ruleName)}</strong></div>`;
+    const box=el('div','dyn-q-box');
+    box.style.cssText='background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px';
+    box.appendChild(el('p',null,esc(q.q)));
+    const optsEl=el('div','dyn-opts');
+    const fb=el('div','dyn-q-fb');
+    let answered=false;
+    const idxs=q.opts.map((_,i)=>i).sort(()=>Math.random()-.5);
+    idxs.forEach(oi=>{
+      const b=el('button','dyn-opt',esc(q.opts[oi]));
+      b.onclick=()=>{
+        if(answered)return;answered=true;
+        const ok=(oi===q.a);
+        updateSR(q.ruleId,ok);
+        if(ok){correct++;b.classList.add('right');fb.className='dyn-q-fb feedback ok';fb.textContent='✅ '+(q.reason||'صحيح!');}
+        else{b.classList.add('wrong');optsEl.querySelectorAll('.dyn-opt').forEach((x,xi)=>{if(idxs[xi]===q.a)x.classList.add('right');});fb.className='dyn-q-fb feedback err';fb.textContent='❌ '+(q.reason||'');}
+        box.appendChild(fb);
+        setTimeout(()=>{qi++;showQ();},1600);
+      };
+      optsEl.appendChild(b);
+    });
+    box.appendChild(optsEl);
+    wrap.appendChild(box);
+  }
+  function finishSR(c,t){
+    wrap.innerHTML=`<div style="text-align:center;padding:40px 20px"><div style="font-size:48px;margin-bottom:12px">${c===t?'🌟':'✅'}</div><h2 style="color:var(--teal-dark);margin-bottom:8px">انتهت جلسة المراجعة</h2><p style="color:var(--soft);margin-bottom:20px">أجبت صحيحاً عن ${c} من ${t} سؤالاً</p><button class="btn" onclick="show('home');renderHome()">الرئيسية</button></div>`;
+    if(c===t)triggerConfetti();
+  }
+  v.appendChild(wrap);
+  showQ();
+}
+
+/* ════ التحدي اليومي ════ */
+function getDailyChallengeQ(){
+  const today=new Date().toLocaleDateString('en-CA');
+  // اجمع كل أسئلة MCQ من الدورتين الأولى والثانية
+  const pool=[];
+  ['c1','c2','c3'].forEach(cid=>{
+    const c=COURSES[cid];
+    if(!c||!c.rules)return;
+    c.rules.forEach(r=>{
+      if(r.mcq&&r.mcq.q) pool.push({q:r.mcq.q,opts:r.mcq.opts,a:r.mcq.a,reason:r.mcq.reason||'',ruleName:r.nameAr});
+    });
+    if(c.exam) c.exam.filter(e=>e.type==='mcq'||e.type==='tf').forEach(e=>pool.push({q:e.q,opts:e.opts,a:e.a,reason:e.reason||'',ruleName:''}));
+  });
+  if(!pool.length)return null;
+  // اختر سؤالاً حسب اليوم (ثابت لكل يوم)
+  const seed=today.split('-').reduce((a,b)=>a*31+parseInt(b),0);
+  const idx=Math.abs(seed)%pool.length;
+  return {idx,q:pool[idx]};
+}
+function renderDailyChallenge(container){
+  const today=new Date().toLocaleDateString('en-CA');
+  const dc=S.dailyChallenge;
+  const qData=getDailyChallengeQ();
+  if(!qData)return;
+  const {idx,q}=qData;
+  // إذا تغيّر اليوم أعد ضبط التحدي
+  if(dc.date!==today){
+    S.dailyChallenge={date:today,qIdx:idx,answered:false,correct:false,userAns:null};
+    save();
+  }
+  const card=el('div','daily-challenge-card');
+  const hdr=el('div','dc-header');
+  hdr.innerHTML=`<span class="dc-badge">🌟 تحدي اليوم</span><span class="dc-date">${new Date().toLocaleDateString('ar-SA',{weekday:'long',day:'numeric',month:'long'})}</span>`;
+  card.appendChild(hdr);
+  card.appendChild(el('div','dc-q',esc(q.q)));
+  if(q.ruleName) card.appendChild(el('div',null,`<span style="font-size:11px;color:var(--muted)">من حكم: ${esc(q.ruleName)}</span>`));
+  const optsWrap=el('div','dc-opts');
+  if(S.dailyChallenge.answered){
+    // اعرض النتيجة فقط
+    q.opts.forEach((o,oi)=>{
+      const b=el('button','dc-opt');
+      b.textContent=o;b.disabled=true;
+      if(oi===q.a)b.classList.add('dc-right');
+      else if(oi===S.dailyChallenge.userAns)b.classList.add('dc-wrong');
+      optsWrap.appendChild(b);
+    });
+    const res=el('div','dc-result '+(S.dailyChallenge.correct?'ok':'err'));
+    res.textContent=(S.dailyChallenge.correct?'✅ أحسنت! ':'❌ ')+(q.reason||'');
+    card.appendChild(optsWrap);card.appendChild(res);
+  }else{
+    q.opts.forEach((o,oi)=>{
+      const b=el('button','dc-opt',esc(o));
+      b.onclick=()=>{
+        const ok=(oi===q.a);
+        S.dailyChallenge.answered=true;S.dailyChallenge.correct=ok;S.dailyChallenge.userAns=oi;
+        if(ok)award(2,'dc_'+today);
+        save();
+        renderHome(); // أعد الرسم
+      };
+      optsWrap.appendChild(b);
+    });
+    card.appendChild(optsWrap);
+  }
+  container.appendChild(card);
+}
+
+/* ════ لوحة التحليل ════ */
+function renderAnalyticsWidget(container){
+  const allRules=[];
+  ['c1','c2','c3'].forEach(cid=>{
+    const c=COURSES[cid];
+    if(!c||!c.rules||c.soon)return;
+    c.rules.forEach(r=>allRules.push({r,cid,done:!!(S.done[cid]&&S.done[cid].includes(r.id))}));
+  });
+  const totalDone=allRules.filter(x=>x.done).length;
+  const totalAll=allRules.length;
+  if(!totalDone)return;
+  // حوسبة الأحكام الأضعف (الأقل مستوىً في SR)
+  const weak=allRules.filter(x=>x.done).map(x=>{
+    const sr=S.sr[x.r.id]||{level:0};
+    return {name:x.r.nameAr,level:sr.level,cid:x.cid};
+  }).sort((a,b)=>a.level-b.level).slice(0,5);
+  const card=el('div','analytics-card');
+  card.appendChild(el('div','analytics-title','📊 تحليل أدائك'));
+  // نسبة إكمال كل دورة
+  ['c1','c2','c3'].forEach(cid=>{
+    const c=COURSES[cid];
+    if(!c||!c.rules||c.soon)return;
+    const dn=(S.done[cid]||[]).length,tot=c.rules.length;
+    const pct=tot?Math.round(dn/tot*100):0;
+    const row=el('div','analytics-row');
+    const col=c.color||'var(--teal)';
+    row.innerHTML=`<div class="analytics-row-lbl">${esc(c.name.replace('الدورة ',''))}</div><div class="analytics-bar-wrap"><div class="analytics-bar-fill" style="width:${pct}%;background:${col}"></div></div><div class="analytics-pct" style="color:${col}">${pct}%</div>`;
+    card.appendChild(row);
+  });
+  // أضعف الأحكام
+  if(weak.length){
+    card.appendChild(el('div',null,'<div style="font-size:11px;font-weight:700;color:var(--soft);margin:10px 0 6px;letter-spacing:.5px">أحكام تحتاج مراجعة:</div>'));
+    const levelLabel=['جديد','مرّة أخرى','جيد','رائع','متقن'];
+    weak.forEach(w=>{
+      const wRow=el('div','analytics-row');
+      wRow.innerHTML=`<div class="analytics-row-lbl">${esc(w.name)}</div><div style="font-size:11px;padding:2px 8px;border-radius:99px;background:${w.level<=1?'var(--err-pale)':w.level<=2?'var(--warn-pale)':'var(--ok-pale)'};color:${w.level<=1?'var(--err)':w.level<=2?'var(--warn)':'var(--ok)'}">${levelLabel[w.level]||'—'}</div>`;
+      card.appendChild(wRow);
+    });
+  }
+  container.appendChild(card);
+}
+
+/* ════ اختبار الزمن ════ */
+let _timedInterval=null;
+function startTimedQuiz(){
+  // اجمع 10 أسئلة MCQ عشوائية من كل الدورات
+  const pool=[];
+  ['c1','c2','c3'].forEach(cid=>{
+    const c=COURSES[cid];
+    if(!c||!c.rules||c.soon)return;
+    c.rules.forEach(r=>{if(r.mcq&&r.mcq.q)pool.push({...r.mcq,ruleId:r.id,cid,ruleName:r.nameAr});});
+    if(c.exam)c.exam.filter(e=>e.type==='mcq'||e.type==='tf').forEach(e=>pool.push({...e,ruleId:'',cid,ruleName:''}));
+  });
+  if(pool.length<4){toast('العب أولاً ببعض الأحكام لتجميع الأسئلة');return;}
+  const shuffled=pool.sort(()=>Math.random()-.5).slice(0,10);
+  const v=document.getElementById('timedQuizView');
+  v.innerHTML='';v.className='view';
+  show('timedQuizView');
+  // الرأس
+  const hdr=el('div','compare-header');
+  hdr.innerHTML=`<div style="font-size:15px;font-weight:800;color:var(--teal-dark)">⚡ اختبار الزمن</div><div id="timedScoreLive" class="timed-score-live">0 / ${shuffled.length}</div><button class="fc-close" onclick="clearInterval(_timedInterval);show('home');renderHome()">✕ خروج</button>`;
+  v.appendChild(hdr);
+  const wrap=el('div');wrap.style.cssText='max-width:680px;margin:80px auto 40px;padding:0 16px';
+  // العداد
+  const timerWrap=el('div','timed-timer');
+  timerWrap.innerHTML=`<div><div class="timer-display" id="timerDisplay">60</div><div class="timer-label">ثانية</div></div><div style="font-size:13px;color:var(--soft);text-align:center">أجب على أكبر قدر ممكن<br>في الوقت المحدد</div>`;
+  wrap.appendChild(timerWrap);
+  // الأسئلة
+  let answers={},score=0;
+  shuffled.forEach((q,qi)=>{
+    const box=el('div','exam-q');
+    box.id='tq_'+qi;
+    box.appendChild(el('div','qnum',`${qi+1} — ${q.ruleName?esc(q.ruleName):''}`));
+    box.appendChild(el('h3',null,esc(q.q)));
+    const opts=el('div','opts');
+    const idxs=q.opts.map((_,i)=>i).sort(()=>Math.random()-.5);
+    idxs.forEach(oi=>{
+      const b=el('button','opt',esc(q.opts[oi]));
+      b.onclick=()=>{
+        if(answers[qi]!=null)return;
+        opts.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));
+        b.classList.add('sel');
+        answers[qi]=oi;
+        const ok=(oi===q.a);
+        if(ok){score++;b.classList.add('right');}else{b.classList.add('wrong');opts.querySelectorAll('.opt').forEach((x,xi)=>{if(idxs[xi]===q.a)x.classList.add('right');});}
+        document.getElementById('timedScoreLive').textContent=score+' / '+shuffled.length;
+        const fb=el('div','feedback '+(ok?'ok':'err'));
+        fb.textContent=(ok?'✅ ':'❌ ')+(q.reason||'');
+        box.appendChild(fb);
+      };
+      opts.appendChild(b);
+    });
+    box.appendChild(opts);
+    wrap.appendChild(box);
+  });
+  v.appendChild(wrap);
+  // المؤقت
+  let timeLeft=60;
+  clearInterval(_timedInterval);
+  _timedInterval=setInterval(()=>{
+    timeLeft--;
+    const disp=document.getElementById('timerDisplay');
+    if(disp)disp.textContent=timeLeft;
+    if(timeLeft<=10)timerWrap.classList.add('warn');
+    if(timeLeft<=0){
+      clearInterval(_timedInterval);
+      finishTimedQuiz(score,shuffled.length);
+    }
+  },1000);
+}
+function finishTimedQuiz(score,total){
+  const pct=Math.round(score/total*100);
+  if(pct===100)award(3,'timed_perfect');
+  else if(pct>=80)award(1,'timed_good');
+  if(pct===100)triggerConfetti();
+  toast(`⚡ ${score}/${total} — ${pct>=80?'ممتاز!':pct>=50?'جيد!':'تدرّب أكثر'}`);
+  setTimeout(()=>{show('home');renderHome();},2000);
+}
+
+/* ════ تتبع الأخطاء ════ */
+function trackMistake(q,opts,a,userA,reason,ruleName){
+  if(userA===a)return; // لا نتتبع الصحيح
+  S.mistakes.unshift({q,opts,a,userA,reason,ruleName,date:new Date().toLocaleDateString('en-CA')});
+  if(S.mistakes.length>60)S.mistakes=S.mistakes.slice(0,60);
+  save();
+}
+function showMistakesReview(){
+  if(!S.mistakes||!S.mistakes.length){toast('لا توجد أخطاء مسجَّلة بعد — ممتاز!');return;}
+  // احذف المكرر
+  const seen=new Set();
+  const unique=S.mistakes.filter(m=>{const k=m.q;if(seen.has(k))return false;seen.add(k);return true;}).slice(0,10);
+  startSRSession(unique.map(m=>({q:m.q,opts:m.opts,a:m.a,reason:m.reason||'',ruleId:'',cid:'',ruleName:m.ruleName||'خطأ سابق'})));
+}
+
+/* ════ مقارنة حكمين ════ */
+function showCompareView(){
+  const v=document.getElementById('compareView');
+  v.innerHTML='';v.classList.remove('hidden');
+  // اجمع كل الأحكام
+  const allRules=[];
+  ['c1','c2','c3'].forEach(cid=>{
+    const c=COURSES[cid];
+    if(!c||!c.rules||c.soon)return;
+    c.rules.forEach(r=>allRules.push({r,cid,label:`${c.name} ← ${r.nameAr}`}));
+  });
+  const makeSelect=(defaultIdx)=>{
+    const sel=el('select','compare-col-select');
+    allRules.forEach((x,i)=>{
+      const op=el('option');op.value=i;op.textContent=x.label;
+      sel.appendChild(op);
+    });
+    sel.value=defaultIdx;
+    return sel;
+  };
+  const hdr=el('div','compare-header');
+  hdr.innerHTML=`<div style="font-size:15px;font-weight:800;color:var(--teal-dark)">⚖️ مقارنة حكمين</div><button class="fc-close" onclick="document.getElementById('compareView').classList.add('hidden')">✕ إغلاق</button>`;
+  v.appendChild(hdr);
+  const cols=el('div','compare-cols');
+  cols.style.marginTop='16px';
+  [0,1].forEach((side,si)=>{
+    const col=el('div','compare-col');
+    const sel=makeSelect(si===0?0:Math.min(1,allRules.length-1));
+    const defEl=el('div','compare-col-def');
+    const mcqEl=el('div');mcqEl.style.cssText='margin-top:12px;font-size:12.5px;color:var(--soft);border-top:1px dashed var(--line);padding-top:10px';
+    const update=()=>{
+      const {r,cid}=allRules[+sel.value];
+      defEl.innerHTML=`<div style="font-size:14px;font-weight:800;color:var(--teal-dark);margin-bottom:10px">${esc(r.nameAr)}</div><div>${esc(r.def||'').replace(/\. /g,'.<br>')}</div>`;
+      mcqEl.innerHTML=r.mcq?`<strong>سؤال تقييمي:</strong> ${esc(r.mcq.q)}`:'';
+    };
+    sel.onchange=update;
+    col.appendChild(sel);
+    col.appendChild(defEl);
+    col.appendChild(mcqEl);
+    update();
+    cols.appendChild(col);
+  });
+  v.appendChild(cols);
+}
+
+/* ════ وضع القراءة المُركَّزة ════ */
+function toggleFocusMode(){
+  document.body.classList.toggle('focus-mode');
+  const btn=document.getElementById('focusModeBtn');
+  if(btn) btn.textContent=document.body.classList.contains('focus-mode')?'🔓 وضع عادي':'🎯 تركيز';
 }
 
 /* بناء آية كـ spans قابلة للنقر/التمييز */
@@ -4312,6 +4854,21 @@ function renderHome(){
     (dailyPct>=100?`<div class="daily-badge">✓ مكتمل</div>`:'');
   inner.appendChild(dayEl);
 
+  /* ───── التحدي اليومي ───── */
+  renderDailyChallenge(inner);
+
+  /* ───── مراجعة التكرار المتباعد (SR) ───── */
+  const dueRules=getDueRules();
+  if(dueRules.length>0){
+    const srWid=el('div','sr-widget');
+    srWid.innerHTML=
+      `<div style="flex:1"><div style="font-size:14px;font-weight:800;color:#3949ab">🔁 مراجعة التكرار المتباعد</div>`+
+      `<div style="font-size:12px;color:var(--soft);margin-top:3px">${dueRules.length} حكم مستحق للمراجعة الآن</div></div>`+
+      `<button class="btn" id="srLaunchBtn" style="font-size:13px;padding:8px 16px;margin-right:auto">ابدأ المراجعة</button>`;
+    inner.appendChild(srWid);
+    setTimeout(()=>{const b=document.getElementById('srLaunchBtn');if(b)b.onclick=showSRReview;},0);
+  }
+
   /* ───── زرّ المتابعة (آخر دورة غير مكتملة) ───── */
   let resumeCid=null;
   ['c1','c2','c3'].forEach(cid=>{
@@ -4366,6 +4923,31 @@ function renderHome(){
     fcBtn.onclick=()=>showFlashcards();
     inner.appendChild(fcBtn);
   }
+
+  /* ───── اختبار الزمن + مراجعة الأخطاء ───── */
+  const actionsRow=el('div');
+  actionsRow.style.cssText='display:flex;gap:10px;flex-wrap:wrap;margin-bottom:4px';
+  const tqBtn=el('button','btn-ghost');
+  tqBtn.style.cssText='flex:1;min-width:140px;text-align:center;padding:12px 16px;font-size:13px';
+  tqBtn.innerHTML='⚡ اختبار الزمن (60 ث)';
+  tqBtn.onclick=startTimedQuiz;
+  actionsRow.appendChild(tqBtn);
+  if(S.mistakes&&S.mistakes.length>0){
+    const mkBtn=el('button','btn-ghost');
+    mkBtn.style.cssText='flex:1;min-width:140px;text-align:center;padding:12px 16px;font-size:13px';
+    mkBtn.innerHTML=`📋 مراجعة الأخطاء (${S.mistakes.length})`;
+    mkBtn.onclick=showMistakesReview;
+    actionsRow.appendChild(mkBtn);
+  }
+  const cmpBtn=el('button','btn-ghost');
+  cmpBtn.style.cssText='flex:1;min-width:140px;text-align:center;padding:12px 16px;font-size:13px';
+  cmpBtn.innerHTML='⚖️ مقارنة حكمين';
+  cmpBtn.onclick=showCompareView;
+  actionsRow.appendChild(cmpBtn);
+  inner.appendChild(actionsRow);
+
+  /* ───── لوحة التحليل ───── */
+  renderAnalyticsWidget(inner);
 
   /* ───── عنوان قسم المسارات ───── */
   const pathHdr=el('div','home-section-hdr');
@@ -4605,6 +5187,9 @@ function renderHeader(){
           <span id="darkToggleHdrIcon">${isDark?'☀️':'🌙'}</span>
           <span id="darkToggleHdrLabel" style="margin-right:4px">${isDark?'نهاري':'ليلي'}</span>
         </button>
+        <button class="btn-ghost focus-toggle" id="focusModeBtn" style="font-size:13px;padding:8px 14px" title="وضع التركيز" onclick="toggleFocusMode()">
+          ${document.body.classList.contains('focus-mode')?'🔓 وضع عادي':'🎯 تركيز'}
+        </button>
       </div>
     </div>
     <div id="cDesc" style="font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5">${esc(c.desc.length>120?c.desc.slice(0,120)+'…':c.desc)}</div>
@@ -4811,7 +5396,7 @@ function openRule(i){
   const panel1=el('div'); panel1.style.cssText='padding:16px';
   const panel2=el('div'); panel2.style.cssText='padding:16px;display:none';
   panel1.appendChild(buildExercise(r,exState,()=>checkComplete(r,exState,mcqState)));
-  panel2.appendChild(buildMCQ(r.mcq,mcqState,()=>checkComplete(r,exState,mcqState)));
+  panel2.appendChild(buildMCQ(r.mcq,mcqState,()=>checkComplete(r,exState,mcqState),r.nameAr));
 
   tab1.onclick=()=>{
     tab1.style.cssText='flex:1;padding:10px 14px;font-size:13px;font-weight:700;background:var(--teal);color:#fff;border-radius:0;border:none';
@@ -4916,7 +5501,7 @@ function buildExercise(r,state,onDone){
   return wrap;
 }
 
-function buildMCQ(mcq,state,onDone){
+function buildMCQ(mcq,state,onDone,ruleName){
   const wrap=el('div');
   wrap.appendChild(el('p',null,esc(mcq.q)));
   const fb=el('div');
@@ -4933,6 +5518,7 @@ function buildMCQ(mcq,state,onDone){
       }else{
         b.classList.add('wrong');b.onclick=null;
         fb.className='feedback err';fb.textContent='❌ إجابة غير صحيحة، اختر غيرها.';
+        trackMistake(mcq.q,mcq.opts,mcq.a,oi,mcq.reason||'',ruleName||'');
       }
     };
     opts.appendChild(b);
@@ -5080,7 +5666,10 @@ function gradeExam(){
     const a=examAns[qi];let ok=false;
     if(q.type==='click'){const need=q.accept.slice().sort();const got=(a||[]).slice().sort();ok=need.length===got.length&&need.every((n,i)=>n===got[i]);}
     else ok=(a===q.a);
-    if(ok)correct++;else if(q.rule)wrongRules.push(q.rule);
+    if(ok)correct++;else{
+      if(q.rule)wrongRules.push(q.rule);
+      if(q.opts)trackMistake(q.q,q.opts,q.a,a,q.reason||'',q.rule||'');
+    }
   });
   const pct=Math.round(correct/(window._examQs||c.exam).length*100);
   const pass=pct>=80;
