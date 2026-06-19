@@ -6538,7 +6538,7 @@ let _fcFlipped=false; // هل البطاقة مقلوبة؟
 let _fcMarked=new Set(); // الأحكام المعلَّمة كـ"مراجَعة"
 
 function showFlashcards(cid){
-  // اجمع كل الأحكام المُتقَنة من كل الدورات (أو دورة محددة)
+  // اجمع الأحكام المُتقَنة فقط من كل الدورات (أو دورة محددة)
   _fcCards=[];
   const order=cid?[cid]:['c1','c2','c3'];
   order.forEach(id=>{
@@ -6550,17 +6550,7 @@ function showFlashcards(cid){
       }
     });
   });
-  // إضافة الأحكام غير المُتقَنة بعد المُتقَنة
-  order.forEach(id=>{
-    const c=COURSES[id];
-    if(!c||!c.rules||c.soon)return;
-    c.rules.forEach(r=>{
-      if(!(S.done[id]&&S.done[id].includes(r.id))){
-        _fcCards.push({rule:r, cid:id});
-      }
-    });
-  });
-  if(!_fcCards.length){toast('لا توجد أحكام بعد — ابدأ التعلّم أولاً');return;}
+  if(!_fcCards.length){toast('أتقِن حكماً واحداً على الأقل لتظهر البطاقات');return;}
   // خلط البطاقات
   _fcCards.sort(()=>Math.random()-.5);
   _fcIdx=0;
