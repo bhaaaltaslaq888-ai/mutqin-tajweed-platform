@@ -2555,6 +2555,285 @@ body.dark #darkToggle:hover {
 .dyn-q-box .dyn-opt.wrong { background:var(--err-pale);border-color:var(--err);color:var(--err); }
 .dyn-q-fb { font-size:13px;margin-top:8px;padding:6px 10px;border-radius:7px; }
 
+/* ══════════════════════════════════════════════════════════════
+   ✨ التحسينات الجديدة — Streak / Daily Goal / Flashcards / Search
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── شريط الأيام المتواصلة ── */
+.streak-widget {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 12px 18px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-xs);
+  position: relative;
+  overflow: hidden;
+}
+.streak-widget::before {
+  content: '';
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, #ff9500, #ff3b30);
+  border-radius: 0 var(--r-lg) var(--r-lg) 0;
+}
+.streak-flame { font-size: 28px; line-height: 1; flex-shrink: 0; }
+.streak-info { flex: 1; }
+.streak-num { font-size: 22px; font-weight: 800; color: var(--ink); line-height: 1; }
+.streak-num span { font-size: 13px; font-weight: 500; color: var(--soft); margin-right: 4px; }
+.streak-lbl { font-size: 12px; color: var(--soft); margin-top: 2px; }
+.streak-dots { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
+.streak-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--line);
+  transition: background .2s;
+}
+.streak-dot.on { background: #ff9500; box-shadow: 0 0 6px rgba(255,149,0,.4); }
+
+/* ── الهدف اليومي ── */
+.daily-widget {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 12px 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-xs);
+  position: relative;
+  overflow: hidden;
+}
+.daily-widget::before {
+  content: '';
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, var(--teal-mid), var(--teal-dark));
+  border-radius: 0 var(--r-lg) var(--r-lg) 0;
+}
+.daily-icon { font-size: 24px; flex-shrink: 0; }
+.daily-info { flex: 1; min-width: 0; }
+.daily-title { font-size: 13px; font-weight: 700; color: var(--ink-mid); margin-bottom: 4px; }
+.daily-bar-wrap { height: 6px; background: var(--line-light); border-radius: 99px; overflow: hidden; }
+.daily-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(to left, var(--teal-mid), var(--teal-dark));
+  transition: width .5s var(--ease);
+}
+.daily-pct { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.daily-badge {
+  font-size: 11px; font-weight: 700;
+  padding: 3px 10px; border-radius: 99px;
+  background: var(--ok-pale); color: var(--ok);
+  flex-shrink: 0;
+}
+
+/* ── البطاقات التعليمية (Flashcard Mode) ── */
+#flashcardView {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.fc-header {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.fc-title { font-size: 15px; font-weight: 700; color: var(--teal-dark); }
+.fc-counter { font-size: 13px; color: var(--soft); font-weight: 600; }
+.fc-close {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--r-md); padding: 8px 14px;
+  font-size: 13px; font-weight: 600; color: var(--ink-mid);
+  cursor: pointer;
+}
+.fc-close:hover { border-color: var(--teal); color: var(--teal-dark); }
+
+.fc-scene {
+  perspective: 1000px;
+  width: min(480px, 90vw);
+  height: min(280px, 55vw);
+  cursor: pointer;
+  user-select: none;
+}
+.fc-card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .5s cubic-bezier(.4,0,.2,1);
+}
+.fc-card.flipped { transform: rotateY(180deg); }
+.fc-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--r-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+.fc-front {
+  background: linear-gradient(135deg, var(--teal-dark), var(--teal-mid));
+  color: #fff;
+}
+.fc-front .fc-tag { font-size: 11px; font-weight: 700; opacity: .65; letter-spacing: 1px; margin-bottom: 10px; text-transform: uppercase; }
+.fc-front .fc-rname { font-size: 22px; font-weight: 800; line-height: 1.4; }
+.fc-front .fc-hint { font-size: 12px; opacity: .55; margin-top: 14px; }
+.fc-back {
+  background: var(--card);
+  border: 2px solid var(--teal);
+  transform: rotateY(180deg);
+}
+.fc-back .fc-def {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--ink);
+  max-height: 200px;
+  overflow: auto;
+  text-align: right;
+}
+.fc-back .fc-rule-lbl {
+  font-size: 11px; font-weight: 700; color: var(--teal-dark);
+  margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;
+}
+
+.fc-hint-tap {
+  font-size: 12px; color: var(--soft); margin-top: 16px; text-align: center;
+}
+
+.fc-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+.fc-nav-btn {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 10px 22px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all var(--fast);
+  color: var(--ink-mid);
+}
+.fc-nav-btn:hover { border-color: var(--teal); color: var(--teal-dark); transform: scale(1.05); }
+.fc-nav-btn:disabled { opacity: .3; cursor: not-allowed; transform: none; }
+.fc-done-btn {
+  background: var(--ok-pale);
+  border: 1.5px solid var(--ok);
+  border-radius: var(--r-md);
+  padding: 9px 18px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  color: var(--ok); transition: all var(--fast);
+}
+.fc-done-btn.marked { background: var(--ok); color: #fff; }
+.fc-done-btn:hover { background: var(--ok); color: #fff; }
+
+.fc-progress-wrap {
+  width: min(480px, 90vw);
+  height: 4px;
+  background: var(--line);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 16px;
+}
+.fc-progress-bar {
+  height: 100%;
+  background: linear-gradient(to left, var(--teal), var(--gold-light));
+  border-radius: 99px;
+  transition: width .4s var(--ease);
+}
+
+/* ── بحث في الشريط الجانبي ── */
+.nav-search {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-md);
+  font-size: 13px;
+  font-family: inherit;
+  direction: rtl;
+  background: var(--bg);
+  color: var(--ink);
+  outline: none;
+  margin-bottom: 8px;
+  transition: border-color var(--fast);
+}
+.nav-search:focus { border-color: var(--teal); background: var(--card); }
+.nav-search::placeholder { color: var(--muted); }
+
+/* ── مؤشر لوحة المفاتيح ── */
+.kbd-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--line-light);
+  border-radius: var(--r-sm);
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+}
+.kbd-hint kbd {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--ink-mid);
+}
+
+/* ── زر مراجعة البطاقات في الشاشة الرئيسية ── */
+.fc-launch-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--card);
+  border: 1.5px dashed var(--gold);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+  transition: all var(--mid);
+  text-align: right;
+  margin-bottom: 10px;
+}
+.fc-launch-btn:hover {
+  background: var(--gold-pale);
+  border-color: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.fc-launch-icon { font-size: 26px; flex-shrink: 0; }
+.fc-launch-info { flex: 1; }
+.fc-launch-title { font-size: 14px; font-weight: 700; color: var(--warn); }
+.fc-launch-sub { font-size: 12px; color: var(--soft); margin-top: 2px; }
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2567,6 +2846,9 @@ body.dark #darkToggle:hover {
 
 <!-- شاشة الدخول -->
 <div id="home" class="view hidden"></div>
+
+<!-- وضع البطاقات التعليمية -->
+<div id="flashcardView" class="hidden"></div>
 
 <!-- لوحة التحكم (إدارة / معلّم) -->
 <div id="panel" class="view hidden"></div>
@@ -3848,14 +4130,21 @@ let currentEmail=null;
 let currentRole=null;            // 'admin' | 'teacher' | 'student'
 let currentProfile=null;         // ملف Supabase للمعلّم/الأدمن
 const ADMIN_PASSWORD='@bahaa123'; // (احتياطي — لم يعد يُستخدم بعد ربط Supabase)
-let S={done:{c1:[],c2:[],c3:[]},exam:{c1:null,c2:null,c3:null},passed:{c1:false,c2:false,c3:false},stars:0,medals:[],aw:{}};
+let S={done:{c1:[],c2:[],c3:[]},exam:{c1:null,c2:null,c3:null},passed:{c1:false,c2:false,c3:false},stars:0,medals:[],aw:{},streak:0,lastLoginDate:null,dailyGoal:3,dailyDone:0,dailyDate:null};
 let cur={cid:null, ri:0};          // الدورة والحكم الحالي
 let pres={slides:[], i:0, backRi:0};// وضع العرض
 
 function load(){
   try{const s=JSON.parse(localStorage.getItem(LS_KEY));
-    if(s&&s.done) return s;}catch(e){}
-  return {done:{c1:[],c2:[],c3:[]}, exam:{c1:null,c2:null,c3:null}, passed:{c1:false,c2:false,c3:false}, stars:0, medals:[], aw:{}};
+    if(s&&s.done){
+      s.streak      = s.streak||0;
+      s.lastLoginDate = s.lastLoginDate||null;
+      s.dailyGoal   = s.dailyGoal||3;
+      s.dailyDone   = s.dailyDone||0;
+      s.dailyDate   = s.dailyDate||null;
+      return s;
+    }}catch(e){}
+  return {done:{c1:[],c2:[],c3:[]}, exam:{c1:null,c2:null,c3:null}, passed:{c1:false,c2:false,c3:false}, stars:0, medals:[], aw:{}, streak:0, lastLoginDate:null, dailyGoal:3, dailyDone:0, dailyDate:null};
 }
 function save(){try{localStorage.setItem(LS_KEY,JSON.stringify(S));}catch(e){}}
 
@@ -3865,6 +4154,25 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');window.scrollTo(0,0);}
 function toast(msg){const t=el('div','toast',esc(msg));document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
 function award(stars,key){if(key&&S.aw[key])return;if(key)S.aw[key]=1;S.stars+=stars;save();}
+
+function updateStreak(){
+  const today=new Date().toLocaleDateString('en-CA');
+  const yesterday=new Date(Date.now()-86400000).toLocaleDateString('en-CA');
+  if(S.lastLoginDate===today)return;
+  if(S.lastLoginDate===yesterday){
+    S.streak=(S.streak||0)+1;
+  } else {
+    S.streak=1;
+  }
+  S.lastLoginDate=today;
+  if(S.dailyDate!==today){S.dailyDone=0;S.dailyDate=today;}
+  if(S.streak===3)  award(1,'streak3');
+  if(S.streak===7)  award(2,'streak7');
+  if(S.streak===14) award(3,'streak14');
+  if(S.streak===30) award(5,'streak30');
+  save();
+  if(S.streak>1) setTimeout(()=>toast('🔥 '+S.streak+' أيام متتالية — رائع!'),800);
+}
 
 /* بناء آية كـ spans قابلة للنقر/التمييز */
 function ayahHTML(text,opts){
@@ -3920,7 +4228,7 @@ function renderHome(){
     ? `<button class="ht-icon-btn ht-panel-btn" id="htPanel" title="لوحة التحكم">${currentRole==='admin'?'🛡️ لوحة الإدارة':'👨‍🏫 لوحة المعلّم'}</button>`
     : '';
   topbar.innerHTML=
-    `<div class="ht-brand"><span class="ht-mark">مُتقِن</span><span class="ht-dot">·</span><span style="font-size:10px;color:var(--soft);margin-right:4px">v23.11</span></div>`+
+    `<div class="ht-brand"><span class="ht-mark">مُتقِن</span><span class="ht-dot">·</span><span style="font-size:10px;color:var(--soft);margin-right:4px">v24.1</span></div>`+
     `<div class="ht-actions">`+
       panelBtn+
       `<button class="ht-icon-btn" id="htAbout" title="حول المنصة">ℹ️</button>`+
@@ -3966,6 +4274,44 @@ function renderHome(){
   ovWrap.innerHTML=`<div class="home-overall-bar" style="width:${overallPct}%"></div>`;
   inner.appendChild(ovWrap);
 
+  /* ───── شريط الأيام المتواصلة ───── */
+  const streakVal=S.streak||0;
+  const swEl=el('div','streak-widget');
+  const dotCount=7;
+  const today=new Date().toLocaleDateString('en-CA');
+  const loginedToday=S.lastLoginDate===today;
+  let dotsHtml='';
+  for(let d=0;d<dotCount;d++){
+    const active=d<Math.min(streakVal,dotCount)&&loginedToday||(d<streakVal-1&&!loginedToday);
+    // الأيام المنجزة من الـ 7 الأخيرة
+    const filled=(d<(loginedToday?streakVal:streakVal-1)&&d<dotCount);
+    dotsHtml+=`<div class="streak-dot${filled?' on':''}"></div>`;
+  }
+  swEl.innerHTML=
+    `<div class="streak-flame">${streakVal>0?'🔥':'⚡'}</div>`+
+    `<div class="streak-info">`+
+      `<div class="streak-num">${streakVal}<span>يوم متتالٍ</span></div>`+
+      `<div class="streak-lbl">${streakVal>=7?'أداء رائع! 🌟':streakVal>=3?'استمر في الزخم! 💪':'سجّل دخولك يومياً لبناء سلسلتك'}</div>`+
+    `</div>`+
+    `<div class="streak-dots">${dotsHtml}</div>`;
+  inner.appendChild(swEl);
+
+  /* ───── الهدف اليومي ───── */
+  const dailyDone=S.dailyDone||0;
+  const dailyGoal=S.dailyGoal||3;
+  const dailyPct=Math.min(100,Math.round(dailyDone/dailyGoal*100));
+  const dailyDone2=S.dailyDate===today?dailyDone:0;
+  const dayEl=el('div','daily-widget');
+  dayEl.innerHTML=
+    `<div class="daily-icon">🎯</div>`+
+    `<div class="daily-info">`+
+      `<div class="daily-title">الهدف اليومي — ${dailyDone2}/${dailyGoal} أحكام</div>`+
+      `<div class="daily-bar-wrap"><div class="daily-bar-fill" style="width:${dailyPct}%"></div></div>`+
+      `<div class="daily-pct">${dailyPct<100?`أكمل ${dailyGoal-dailyDone2} أحكام أخرى لتحقيق هدفك`:'✅ أحسنت! أكملت هدف اليوم'}</div>`+
+    `</div>`+
+    (dailyPct>=100?`<div class="daily-badge">✓ مكتمل</div>`:'');
+  inner.appendChild(dayEl);
+
   /* ───── زرّ المتابعة (آخر دورة غير مكتملة) ───── */
   let resumeCid=null;
   ['c1','c2','c3'].forEach(cid=>{
@@ -4004,6 +4350,21 @@ function renderHome(){
       openRule(resumeRi);
     };
     inner.appendChild(resume);
+  }
+
+  /* ───── زر البطاقات التعليمية السريعة ───── */
+  const totalDoneAll=(S.done.c1||[]).length+(S.done.c2||[]).length+(S.done.c3||[]).length;
+  if(totalDoneAll>0){
+    const fcBtn=el('button','fc-launch-btn');
+    fcBtn.innerHTML=
+      `<div class="fc-launch-icon">🃏</div>`+
+      `<div class="fc-launch-info">`+
+        `<div class="fc-launch-title">مراجعة سريعة بالبطاقات</div>`+
+        `<div class="fc-launch-sub">راجِع ${totalDoneAll} حكمًا أتقنتها — بطاقة واحدة في كل مرة</div>`+
+      `</div>`+
+      `<div style="font-size:20px;color:var(--gold);opacity:.7">←</div>`;
+    fcBtn.onclick=()=>showFlashcards();
+    inner.appendChild(fcBtn);
   }
 
   /* ───── عنوان قسم المسارات ───── */
@@ -4248,7 +4609,10 @@ function renderHeader(){
     </div>
     <div id="cDesc" style="font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5">${esc(c.desc.length>120?c.desc.slice(0,120)+'…':c.desc)}</div>
     <div class="progress-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
-    <div class="progress-label">أتممت ${dn} من ${tot} حكمًا — ${pct}%</div>`;
+    <div class="progress-label" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
+      <span>أتممت ${dn} من ${tot} حكمًا — ${pct}%</span>
+      <span class="kbd-hint"><kbd>→</kbd><kbd>←</kbd> للتنقل بين الأحكام</span>
+    </div>`;
   document.getElementById('homeBtn').onclick=()=>{renderHome();};
   document.getElementById('presentBtn').onclick=()=>enterPresent();
   document.getElementById('darkToggleHdr').onclick=function(){
@@ -4278,6 +4642,15 @@ function renderNav(){
   const nav=document.getElementById('ruleNav');
   nav.innerHTML='';
   nav.appendChild(el('div','nav-label','أحكام الدورة'));
+
+  // حقل البحث
+  const searchInp=el('input','nav-search');
+  searchInp.type='text';
+  searchInp.placeholder='🔍 ابحث في الأحكام...';
+  searchInp.setAttribute('dir','rtl');
+  nav.appendChild(searchInp);
+
+  const ruleButtons=[];
   c.rules.forEach((r,i)=>{
     const done=S.done[cur.cid].includes(r.id);
     const cls=['nav-rule'];
@@ -4287,7 +4660,16 @@ function renderNav(){
       `<span class="idx">${done?'✓':(i+1)}</span><span class="nm">${esc(r.nameAr)}</span>`);
     b.onclick=()=>{openRule(i);};
     nav.appendChild(b);
+    ruleButtons.push({el:b,name:r.nameAr.toLowerCase()});
   });
+
+  // تصفية الأحكام بالبحث
+  searchInp.oninput=function(){
+    const q=this.value.trim().toLowerCase();
+    ruleButtons.forEach(({el:b,name})=>{
+      b.style.display=(!q||name.includes(q))?'':'none';
+    });
+  };
   nav.appendChild(el('div','nav-sep'));
   // زر الاختبار — متاح دائماً في كل الدورات
   const doneCount=(S.done[cur.cid]||[]).length;
@@ -4564,8 +4946,14 @@ function checkComplete(r,exState,mcqState){
   if(S.done[cur.cid].includes(r.id))return;
   S.done[cur.cid].push(r.id);
   award(1,cur.cid+'_'+r.id);
+  // تتبع الهدف اليومي
+  const today=new Date().toLocaleDateString('en-CA');
+  if(S.dailyDate!==today){S.dailyDone=0;S.dailyDate=today;}
+  S.dailyDone=(S.dailyDone||0)+1;
   save();
+  triggerConfetti();
   toast('أتقنت هذا الحكم! ⭐');
+  if(S.dailyDone===S.dailyGoal) setTimeout(()=>toast('🎯 أكملت هدفك اليومي — ممتاز!'),1500);
   renderNav();renderHeader();
   // شريط الإكمال + زر التالي
   appendDoneBanner(document.getElementById('ruleArea'),cur.ri);
@@ -5759,6 +6147,7 @@ function loginUser(email, role){
   try{var a=JSON.parse(localStorage.getItem('mutqin_v4_userlist'));if(Array.isArray(a))list=a;}catch(e){}
   if(!list.includes(email)){list.unshift(email);if(list.length>5)list=list.slice(0,5);localStorage.setItem('mutqin_v4_userlist',JSON.stringify(list));}
   S=load();
+  updateStreak();
   renderHome();
 }
 
@@ -5772,6 +6161,7 @@ function loginUserSupa(email, role, profile){
   localStorage.setItem('mutqin_v4_role',currentRole);
   localStorage.setItem('mutqin_v4_supa','1');   // علامة: جلسة Supabase
   S=load();
+  updateStreak();
   renderHome();
 }
 
@@ -6139,6 +6529,121 @@ function buildDynQuestion(r, container) {
 
 
 
+/* ════════════════════════════════════════════════════════════════
+   وضع البطاقات التعليمية السريعة (Flashcard Mode)
+   ════════════════════════════════════════════════════════════════ */
+let _fcCards=[];  // قائمة الأحكام للبطاقات
+let _fcIdx=0;     // الفهرس الحالي
+let _fcFlipped=false; // هل البطاقة مقلوبة؟
+let _fcMarked=new Set(); // الأحكام المعلَّمة كـ"مراجَعة"
+
+function showFlashcards(cid){
+  // اجمع كل الأحكام المُتقَنة من كل الدورات (أو دورة محددة)
+  _fcCards=[];
+  const order=cid?[cid]:['c1','c2','c3'];
+  order.forEach(id=>{
+    const c=COURSES[id];
+    if(!c||!c.rules||c.soon)return;
+    c.rules.forEach(r=>{
+      if(S.done[id]&&S.done[id].includes(r.id)){
+        _fcCards.push({rule:r, cid:id});
+      }
+    });
+  });
+  // إضافة الأحكام غير المُتقَنة بعد المُتقَنة
+  order.forEach(id=>{
+    const c=COURSES[id];
+    if(!c||!c.rules||c.soon)return;
+    c.rules.forEach(r=>{
+      if(!(S.done[id]&&S.done[id].includes(r.id))){
+        _fcCards.push({rule:r, cid:id});
+      }
+    });
+  });
+  if(!_fcCards.length){toast('لا توجد أحكام بعد — ابدأ التعلّم أولاً');return;}
+  // خلط البطاقات
+  _fcCards.sort(()=>Math.random()-.5);
+  _fcIdx=0;
+  _fcFlipped=false;
+  _fcMarked=new Set();
+  renderFlashcardView();
+  document.getElementById('flashcardView').classList.remove('hidden');
+}
+
+function exitFlashcards(){
+  document.getElementById('flashcardView').classList.add('hidden');
+}
+
+function fcNavigate(dir){
+  _fcIdx=Math.max(0,Math.min(_fcCards.length-1,_fcIdx+dir));
+  _fcFlipped=false;
+  renderFlashcardView();
+}
+function fcFlipCurrent(){
+  _fcFlipped=!_fcFlipped;
+  const card=document.querySelector('.fc-card');
+  if(card) card.classList.toggle('flipped',_fcFlipped);
+}
+
+function renderFlashcardView(){
+  const container=document.getElementById('flashcardView');
+  const {rule:r,cid}=_fcCards[_fcIdx];
+  const c=COURSES[cid];
+  const total=_fcCards.length;
+  const markedCount=_fcMarked.size;
+  const pct=Math.round((_fcIdx+1)/total*100);
+  const isMarked=_fcMarked.has(_fcIdx);
+  const isDone=S.done[cid]&&S.done[cid].includes(r.id);
+
+  // استخرج نص التعريف (بدون HTML)
+  const defText=(r.def||'').replace(/<[^>]+>/g,'').trim();
+  const shortDef=defText.length>280?defText.slice(0,280)+'…':defText;
+
+  container.innerHTML=
+    `<div class="fc-header">`+
+      `<div class="fc-title">🃏 مراجعة سريعة — ${esc(c.name)}</div>`+
+      `<div class="fc-counter">${_fcIdx+1} / ${total}</div>`+
+      `<button class="fc-close" onclick="exitFlashcards()">✕ إغلاق</button>`+
+    `</div>`+
+
+    `<div class="fc-scene" id="fcScene" onclick="fcFlipCurrent()">`+
+      `<div class="fc-card${_fcFlipped?' flipped':''}" id="fcCard">`+
+        `<div class="fc-face fc-front">`+
+          `<div class="fc-tag">${isDone?'✓ مُتقَن':'لم يُتقَن بعد'} — ${esc(c.name)}</div>`+
+          `<div class="fc-rname">${esc(r.nameAr)}</div>`+
+          `<div class="fc-hint">اضغط لكشف التعريف</div>`+
+        `</div>`+
+        `<div class="fc-face fc-back">`+
+          `<div class="fc-rule-lbl">${esc(r.nameAr)}</div>`+
+          `<div class="fc-def">${esc(shortDef)}</div>`+
+        `</div>`+
+      `</div>`+
+    `</div>`+
+    `<div class="fc-hint-tap">اضغط على البطاقة أو اضغط مسافة لقلبها</div>`+
+
+    `<div class="fc-nav">`+
+      `<button class="fc-nav-btn" onclick="fcNavigate(-1)" ${_fcIdx===0?'disabled':''}">⟩</button>`+
+      `<button class="fc-done-btn${isMarked?' marked':''}" onclick="fcToggleMark(${_fcIdx})">`+
+        `${isMarked?'✓ راجعت':'☐ راجعت'}`+
+      `</button>`+
+      `<button class="fc-nav-btn" onclick="fcNavigate(1)" ${_fcIdx===total-1?'disabled':''}>⟨</button>`+
+    `</div>`+
+
+    `<div class="fc-progress-wrap">`+
+      `<div class="fc-progress-bar" style="width:${pct}%"></div>`+
+    `</div>`+
+    `<div style="font-size:12px;color:var(--soft);margin-top:8px;text-align:center">`+
+      `${markedCount} بطاقة مراجَعة من ${total} | ← → للتنقل، مسافة للقلب، Esc للخروج`+
+    `</div>`;
+}
+
+function fcToggleMark(idx){
+  if(_fcMarked.has(idx)) _fcMarked.delete(idx);
+  else _fcMarked.add(idx);
+  renderFlashcardView();
+  // لا نقلب البطاقة عند التعليم
+}
+
 function initApp(){
   // Dark mode persistence
   if(localStorage.getItem('mutqin_dark')==='1'){
@@ -6215,10 +6720,31 @@ function triggerConfetti(){
 
 /* ================= تشغيل ================= */
 document.addEventListener('keydown',e=>{
-  if(document.getElementById('present').classList.contains('hidden'))return;
-  if(e.key==='ArrowRight'||e.key==='ArrowDown'){pMove(1);} // RTL: التالي
-  if(e.key==='ArrowLeft'||e.key==='ArrowUp'){pMove(-1);}
-  if(e.key==='Escape')exitPresent();
+  // وضع العرض التقديمي
+  if(!document.getElementById('present').classList.contains('hidden')){
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'){pMove(1);}
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){pMove(-1);}
+    if(e.key==='Escape')exitPresent();
+    return;
+  }
+  // وضع البطاقات التعليمية
+  if(!document.getElementById('flashcardView').classList.contains('hidden')){
+    if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ fcNavigate(e.key==='ArrowRight'?1:-1); }
+    if(e.key==='Escape')exitFlashcards();
+    if(e.key===' '){e.preventDefault();fcFlipCurrent();}
+    return;
+  }
+  // وضع الدورة — التنقل بالأسهم بين الأحكام
+  if(!document.getElementById('course').classList.contains('hidden')){
+    const c=COURSES[cur.cid];
+    if(!c||!c.rules)return;
+    if((e.key==='ArrowLeft')&&cur.ri<c.rules.length-1){
+      e.preventDefault();openRule(cur.ri+1);
+    }
+    if((e.key==='ArrowRight')&&cur.ri>0){
+      e.preventDefault();openRule(cur.ri-1);
+    }
+  }
 });
 initApp();
 
